@@ -46,7 +46,7 @@ Name, Kontaktdaten, Adresse, Gruppengröße, Buchungsfenster und Zeitslots werde
 
 4. Einen Key-Index auf `date` und einen weiteren auf `status` anlegen.
 5. Einen Server-API-Key mit ausschließlich `rows.read` und `rows.write` erstellen.
-6. `.env.example` nach `.env.local` kopieren und die Werte einsetzen. Den API-Key niemals mit `NEXT_PUBLIC_` kennzeichnen.
+6. `.env.template` nach `.env.local` kopieren und die Werte einsetzen. Den API-Key niemals mit `NEXT_PUBLIC_` kennzeichnen.
 
 Für mehrere Administratoren werden die freigeschalteten E-Mail-Adressen kommasepariert in `APPWRITE_ADMIN_EMAILS` eingetragen. Die Anmeldung erfolgt über einen einmaligen Appwrite-Magic-Link; es werden keine Admin-Passwörter in dieser Anwendung gespeichert.
 
@@ -61,7 +61,7 @@ Das Projekt ist eine reguläre Next.js-App. In Appwrite Sites das Git-Repository
 - Output: `.next`
 - Runtime: Node.js 22
 
-Danach alle Werte aus `.env.example` als Site-Variablen hinterlegen. `NEXT_PUBLIC_SITE_URL` muss der endgültigen HTTPS-Domain entsprechen, damit Canonical URL, Sitemap, Open Graph und strukturierte SEO-Daten korrekt sind.
+Danach alle Werte aus `.env.template` als Site-Variablen hinterlegen. `NEXT_PUBLIC_SITE_URL` muss der endgültigen HTTPS-Domain entsprechen, damit Canonical URL, Sitemap, Open Graph und strukturierte SEO-Daten korrekt sind.
 
 ## Sicherheit und Betrieb
 
