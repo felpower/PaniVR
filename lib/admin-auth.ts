@@ -50,7 +50,7 @@ export async function requireAdmin() {
 }
 
 export function trustedCallbackOrigin(requestOrigin: string) {
-  if (process.env.NODE_ENV === 'development') return requestOrigin;
+  if (process.env.NODE_ENV === 'development' || process.env.SITE_ACCESS_MODE !== 'public') return requestOrigin;
   const configured = process.env.NEXT_PUBLIC_SITE_URL;
   if (!configured || configured.includes('deine-domain')) throw new Error('Die öffentliche Site-URL ist noch nicht konfiguriert.');
   return new URL(configured).origin;
