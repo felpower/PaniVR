@@ -6,14 +6,14 @@ import { Account, Client } from 'node-appwrite';
 export const adminSessionCookie = 'panivr_admin_session';
 
 function appwriteClient() {
-  const endpoint = process.env.APPWRITE_ENDPOINT;
-  const projectId = process.env.APPWRITE_PROJECT_ID;
+  const endpoint = process.env.PANIVR_APPWRITE_ENDPOINT || process.env.APPWRITE_ENDPOINT || process.env.APPWRITE_SITE_API_ENDPOINT;
+  const projectId = process.env.PANIVR_APPWRITE_PROJECT_ID || process.env.APPWRITE_PROJECT_ID || process.env.APPWRITE_SITE_PROJECT_ID;
   if (!endpoint || !projectId) throw new Error('Appwrite Auth ist noch nicht konfiguriert.');
   return new Client().setEndpoint(endpoint).setProject(projectId);
 }
 
 export function getAdminApiAccount() {
-  const apiKey = process.env.APPWRITE_API_KEY;
+  const apiKey = process.env.PANIVR_APPWRITE_API_KEY || process.env.APPWRITE_API_KEY;
   if (!apiKey) throw new Error('Der Appwrite API-Key fehlt.');
   return new Account(appwriteClient().setKey(apiKey));
 }
@@ -23,7 +23,7 @@ export function getSessionAccount(sessionSecret: string) {
 }
 
 export function getAllowedAdminEmails() {
-  const configured = process.env.APPWRITE_ADMIN_EMAILS || 'info@felpower-software.com';
+  const configured = process.env.PANIVR_ADMIN_EMAILS || process.env.APPWRITE_ADMIN_EMAILS || 'info@felpower-software.com';
   return configured.split(',').map((email) => email.trim().toLowerCase()).filter(Boolean);
 }
 

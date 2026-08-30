@@ -11,7 +11,24 @@ npm run dev
 
 Ohne Appwrite-Zugangsdaten läuft der komplette Buchungsablauf lokal im Demo-Modus. In einer Production-Build-Konfiguration werden Reservierungen erst angenommen, sobald Appwrite korrekt verbunden ist.
 
-Solange `BOOKING_ENABLED=false` gesetzt ist, nimmt auch eine bereits veröffentlichte Production-Version keine verbindlichen Reservierungen an. Erst nach Bestätigung der echten Betriebsdaten darf der Wert auf `true` geändert werden.
+Die Development-Version arbeitet mit `SITE_ACCESS_MODE=protected` und `BOOKING_MODE=test`. Dadurch ist die gesamte Site inklusive APIs passwortgeschützt, Suchmaschinen werden abgewiesen und gespeicherte Reservierungen sind eindeutig als `test` markiert. Erst für den echten Livegang werden beide Werte bewusst auf `public` beziehungsweise `live` geändert.
+
+Lokale Secrets gehören ausschließlich in eine ignorierte `.env` oder `.env.local`. Es wird absichtlich keine `.env.example` versioniert. Benötigte Variablennamen:
+
+| Variable | Zweck |
+|---|---|
+| `DEV_ACCESS_PASSWORD` | Passwort der internen Vorschau |
+| `SITE_ACCESS_MODE` | `protected` oder später `public` |
+| `BOOKING_MODE` | `test`, `disabled` oder später `live` |
+| `NEXT_PUBLIC_SITE_URL` | öffentliche HTTPS-URL der Site |
+| `APPWRITE_ENDPOINT` | lokaler Appwrite-Endpunkt |
+| `APPWRITE_PROJECT_ID` | lokale Projekt-ID |
+| `APPWRITE_API_KEY` | lokaler geheimer Server-Key |
+| `APPWRITE_DATABASE_ID` | standardmäßig `panivr` |
+| `APPWRITE_RESERVATIONS_TABLE_ID` | standardmäßig `reservations` |
+| `APPWRITE_ADMIN_EMAILS` | freigeschaltete Admin-Adressen, kommasepariert |
+
+Auf Appwrite Sites dürfen eigene Variablen nicht mit `APPWRITE_` beginnen. Dort werden deshalb die Aliase `PANIVR_APPWRITE_ENDPOINT`, `PANIVR_APPWRITE_PROJECT_ID`, `PANIVR_APPWRITE_API_KEY`, `PANIVR_APPWRITE_DATABASE_ID`, `PANIVR_APPWRITE_RESERVATIONS_TABLE_ID` und `PANIVR_ADMIN_EMAILS` verwendet. Der API-Key und das Development-Passwort müssen als Secret markiert werden.
 
 ## Branding und noch offene Fakten
 
@@ -44,9 +61,9 @@ Name, Kontaktdaten, Adresse, Gruppengröße, Buchungsfenster und Zeitslots werde
 | `source` | String | 30 | ja |
 | `createdAt` | Datetime | – | ja |
 
-4. Einen Key-Index auf `date` und einen weiteren auf `status` anlegen.
+4. Key-Indizes auf `date`, `status`, `date + status` und `date + slot` anlegen.
 5. Einen Server-API-Key mit ausschließlich `rows.read` und `rows.write` erstellen.
-6. `.env.example` nach `.env.local` kopieren und die Werte einsetzen. Den API-Key niemals mit `NEXT_PUBLIC_` kennzeichnen.
+6. Die Werte lokal in einer ignorierten `.env` oder `.env.local` einsetzen. Den API-Key niemals mit `NEXT_PUBLIC_` kennzeichnen.
 
 Für mehrere Administratoren werden die freigeschalteten E-Mail-Adressen kommasepariert in `APPWRITE_ADMIN_EMAILS` eingetragen. Die Anmeldung erfolgt über einen einmaligen Appwrite-Magic-Link; es werden keine Admin-Passwörter in dieser Anwendung gespeichert.
 
@@ -61,7 +78,7 @@ Das Projekt ist eine reguläre Next.js-App. In Appwrite Sites das Git-Repository
 - Output: `.next`
 - Runtime: Node.js 22
 
-Danach alle Werte aus `.env.example` als Site-Variablen hinterlegen. `NEXT_PUBLIC_SITE_URL` muss der endgültigen HTTPS-Domain entsprechen, damit Canonical URL, Sitemap, Open Graph und strukturierte SEO-Daten korrekt sind.
+Danach die oben genannten Site-Aliase sowie `DEV_ACCESS_PASSWORD`, `SITE_ACCESS_MODE=protected`, `BOOKING_MODE=test` und `NEXT_PUBLIC_SITE_URL` als Site-Variablen hinterlegen. `NEXT_PUBLIC_SITE_URL` muss der endgültigen HTTPS-Domain entsprechen, damit Canonical URL, Sitemap, Open Graph und strukturierte SEO-Daten korrekt sind. Änderungen an Site-Variablen erfordern ein neues Deployment.
 
 ## Sicherheit und Betrieb
 

@@ -1,12 +1,12 @@
 import { Client, TablesDB } from 'node-appwrite';
 
-const endpoint = process.env.APPWRITE_ENDPOINT;
-const projectId = process.env.APPWRITE_PROJECT_ID;
-const apiKey = process.env.APPWRITE_API_KEY;
+const endpoint = process.env.PANIVR_APPWRITE_ENDPOINT || process.env.APPWRITE_ENDPOINT || process.env.APPWRITE_SITE_API_ENDPOINT;
+const projectId = process.env.PANIVR_APPWRITE_PROJECT_ID || process.env.APPWRITE_PROJECT_ID || process.env.APPWRITE_SITE_PROJECT_ID;
+const apiKey = process.env.PANIVR_APPWRITE_API_KEY || process.env.APPWRITE_API_KEY;
 
 export const appwriteConfigured = Boolean(endpoint && projectId && apiKey);
-export const databaseId = process.env.APPWRITE_DATABASE_ID || 'panivr';
-export const reservationsTableId = process.env.APPWRITE_RESERVATIONS_TABLE_ID || 'reservations';
+export const databaseId = process.env.PANIVR_APPWRITE_DATABASE_ID || process.env.APPWRITE_DATABASE_ID || 'panivr';
+export const reservationsTableId = process.env.PANIVR_APPWRITE_RESERVATIONS_TABLE_ID || process.env.APPWRITE_RESERVATIONS_TABLE_ID || 'reservations';
 
 export function getTablesDB() {
   if (!endpoint || !projectId || !apiKey) {

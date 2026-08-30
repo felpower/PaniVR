@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { databaseId, getTablesDB, reservationsTableId } from '@/lib/appwrite-server';
 import { getCurrentAdmin } from '@/lib/admin-auth';
 
-const allowedStatuses = ['confirmed', 'completed', 'cancelled'] as const;
+const allowedStatuses = ['test', 'confirmed', 'completed', 'cancelled'] as const;
 
 export async function PATCH(request: NextRequest, context: RouteContext<'/api/admin/reservations/[id]'>) {
   const admin = await getCurrentAdmin();

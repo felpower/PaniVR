@@ -89,7 +89,7 @@ export function BookingForm() {
         <div className="success-icon"><Check size={34} /></div>
         <p className="booking-label">{demo ? 'Demo erfolgreich' : 'Termin reserviert'}</p>
         <h3>{formattedDate}<br />um {slot} Uhr</h3>
-        <p>{demo ? 'Der Ablauf funktioniert. Sobald Appwrite verbunden ist, werden Reservierungen dauerhaft gespeichert.' : 'Geschafft! Wir haben euren Termin eingetragen. Die Details schicken wir euch per E-Mail.'}</p>
+        <p>{demo ? 'Die Testreservierung wurde gespeichert. Sie ist nicht verbindlich und löst keine echte Buchung oder Bestätigung aus.' : 'Geschafft! Wir haben euren Termin eingetragen. Die Details schicken wir euch per E-Mail.'}</p>
         <div className="reference">Reservierungsnummer <strong>{reference}</strong></div>
         <button className="booking-reset" type="button" onClick={() => { setStep(1); setReference(''); setSlot(''); }}>Weiteren Termin reservieren</button>
       </div>

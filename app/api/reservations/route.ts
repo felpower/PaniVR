@@ -27,7 +27,8 @@ export async function POST(request: NextRequest) {
   const result = validateBooking(body);
   if (!result.ok) return NextResponse.json({ message: result.message }, { status: 400 });
 
-  if (process.env.NODE_ENV === 'production' && process.env.BOOKING_ENABLED !== 'true') {
+  const bookingMode = process.env.BOOKING_MODE || (process.env.BOOKING_ENABLED === 'true' ? 'live' : 'disabled');
+  if (process.env.NODE_ENV === 'production' && !['test', 'live'].includes(bookingMode)) {
     return NextResponse.json({ message: 'Die Online-Reservierung befindet sich noch im Testbetrieb. Bitte kontaktiere uns derzeit direkt.' }, { status: 503 });
   }
 
@@ -57,13 +58,13 @@ export async function POST(request: NextRequest) {
         phone: result.data.phone,
         occasion: result.data.occasion,
         notes: result.data.notes,
-        status: 'confirmed',
-        source: 'website',
+        status: bookingMode === 'live' ? 'confirmed' : 'test',
+        source: bookingMode === 'live' ? 'website' : 'website-test',
         createdAt: new Date().toISOString(),
       },
     });
 
-    return NextResponse.json({ reference: rowId.toUpperCase() }, { status: 201 });
+    return NextResponse.json({ reference: rowId.toUpperCase(), demo: bookingMode !== 'live' }, { status: 201 });
   } catch (error) {
     if (errorCode(error) === 409) return NextResponse.json({ message: 'Dieser Termin wurde soeben vergeben. Bitte wähle einen anderen Slot.' }, { status: 409 });
     return NextResponse.json({ message: 'Die Reservierung konnte nicht gespeichert werden. Bitte versuche es erneut.' }, { status: 503 });
