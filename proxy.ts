@@ -16,6 +16,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (process.env.NODE_ENV === 'development' && !process.env.DEV_ACCESS_PASSWORD) {
+    return previewResponse(NextResponse.next());
+  }
+
   if (process.env.SITE_ACCESS_MODE === 'public') return NextResponse.next();
 
   if (publicPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {

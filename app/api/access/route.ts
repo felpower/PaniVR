@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
   const response = NextResponse.json({ destination: safeDestination(data.next) });
   response.cookies.set(developmentAccessCookie, await createDevelopmentAccessToken(), {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: request.nextUrl.protocol === 'https:',
     sameSite: 'strict',
     path: '/',
     maxAge: 60 * 60 * 24 * 7,
@@ -38,11 +38,11 @@ export async function POST(request: NextRequest) {
   return response;
 }
 
-export async function DELETE() {
+export async function DELETE(request: NextRequest) {
   const response = NextResponse.json({ ok: true });
   response.cookies.set(developmentAccessCookie, '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: request.nextUrl.protocol === 'https:',
     sameSite: 'strict',
     path: '/',
     maxAge: 0,

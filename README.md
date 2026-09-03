@@ -11,6 +11,8 @@ npm run dev
 
 Ohne Appwrite-Zugangsdaten läuft der komplette Buchungsablauf lokal im Demo-Modus. In einer Production-Build-Konfiguration werden Reservierungen erst angenommen, sobald Appwrite korrekt verbunden ist.
 
+Für `npm run dev` ist `DEV_ACCESS_PASSWORD` optional. Fehlt es, bleibt die lokale Entwicklung zugänglich und erhält weiterhin `noindex`-Header. Ein Production-Start und die veröffentlichte Vorschau bleiben dagegen ohne konfiguriertes Passwort geschlossen.
+
 Die Development-Version arbeitet mit `SITE_ACCESS_MODE=protected` und `BOOKING_MODE=test`. Dadurch ist die gesamte Site inklusive APIs passwortgeschützt, Suchmaschinen werden abgewiesen und gespeicherte Reservierungen sind eindeutig als `test` markiert. Erst für den echten Livegang werden beide Werte bewusst auf `public` beziehungsweise `live` geändert.
 
 Lokale Secrets gehören ausschließlich in eine ignorierte `.env` oder `.env.local`. Es wird absichtlich keine `.env.example` versioniert. Benötigte Variablennamen:
@@ -79,6 +81,8 @@ Das Projekt ist eine reguläre Next.js-App. In Appwrite Sites das Git-Repository
 - Runtime: Node.js 22
 
 Danach die oben genannten Site-Aliase sowie `DEV_ACCESS_PASSWORD`, `SITE_ACCESS_MODE=protected`, `BOOKING_MODE=test` und `NEXT_PUBLIC_SITE_URL` als Site-Variablen hinterlegen. `NEXT_PUBLIC_SITE_URL` muss der endgültigen HTTPS-Domain entsprechen, damit Canonical URL, Sitemap, Open Graph und strukturierte SEO-Daten korrekt sind. Änderungen an Site-Variablen erfordern ein neues Deployment.
+
+Wenn die Site in Appwrite mit dem GitHub-Repository und `main` als Production-Branch verbunden ist, erzeugt jeder Push auf `main` automatisch ein neues aktives Deployment. Die lokale `.env` wird aus Sicherheitsgründen nie zu GitHub oder Appwrite übertragen. Änderungen an Secrets oder Site-Variablen müssen daher einmalig in Appwrite unter **Settings → Environment variables** vorgenommen und anschließend durch ein Redeploy aktiviert werden.
 
 Auch der Admin-Magic-Link verwendet ausschließlich diese konfigurierte HTTPS-Adresse. Fehlt sie oder enthält sie noch den Platzhalter `deine-domain.at`, wird in Production bewusst kein Link erzeugt; damit kann keine interne `localhost`-Adresse mehr per E-Mail versendet werden.
 
