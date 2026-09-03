@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { BrandIdentity } from '@/components/brand-identity';
 import { DevelopmentLoginForm } from '@/components/development-login-form';
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export default async function DevelopmentAccessPage({ searchParams }: { searchPa
   return (
     <main className="development-login-page">
       <section className="development-login-card">
-        <div className="development-login-brand"><span>P</span>Pani<strong>VR</strong></div>
+        <div className="development-login-brand"><BrandIdentity /></div>
         <p className="development-login-kicker">Interne Vorschau</p>
         <h1>Hier entsteht<br />etwas Neues.</h1>
         <p>Diese Website befindet sich im Development. Reservierungen und Inhalte dienen ausschließlich zum Testen und sind nicht verbindlich.</p>

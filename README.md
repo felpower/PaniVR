@@ -1,6 +1,6 @@
-# PaniVR
+# VR Virtual Raiders
 
-Moderne, SEO-optimierte Website mit einem reservierungsfähigen Appwrite-Backend für die geplante Free-Roam-VR-Halle beim Gasthaus zur Linde in Kleinraming.
+Moderne, SEO-optimierte Website mit einem reservierungsfähigen Appwrite-Backend für die Free-Roam-VR-Halle beim Gasthaus zur Linde in Kleinraming.
 
 ## Lokal starten
 
@@ -32,7 +32,7 @@ Auf Appwrite Sites dürfen eigene Variablen nicht mit `APPWRITE_` beginnen. Dort
 
 ## Branding und noch offene Fakten
 
-Name, Kontaktdaten, Adresse, Gruppengröße, Buchungsfenster und Zeitslots werden zentral in `lib/brand.ts` gepflegt. Dadurch kann `PaniVR` später mit einer einzigen Änderung umbenannt werden. Vor dem Livegang sind vor allem diese Werte zu bestätigen:
+Name, Kontaktdaten, Adresse, Gruppengröße, Buchungsfenster und Zeitslots werden zentral in `lib/brand.ts` gepflegt. Vor dem Livegang sind vor allem diese Werte zu bestätigen:
 
 - endgültiger Name und Domain
 - genaue Hallengröße statt `XX m²`
@@ -62,7 +62,7 @@ Name, Kontaktdaten, Adresse, Gruppengröße, Buchungsfenster und Zeitslots werde
 | `createdAt` | Datetime | – | ja |
 
 4. Key-Indizes auf `date`, `status`, `date + status` und `date + slot` anlegen.
-5. Einen Server-API-Key mit ausschließlich `rows.read` und `rows.write` erstellen.
+5. Einen Server-API-Key mit `rows.read`, `rows.write` und `sessions.write` erstellen. Die ersten beiden Scopes werden für Buchungen und Administration benötigt, `sessions.write` für die passwortlosen Admin-Links.
 6. Die Werte lokal in einer ignorierten `.env` oder `.env.local` einsetzen. Den API-Key niemals mit `NEXT_PUBLIC_` kennzeichnen.
 
 Für mehrere Administratoren werden die freigeschalteten E-Mail-Adressen kommasepariert in `APPWRITE_ADMIN_EMAILS` eingetragen. Die Anmeldung erfolgt über einen einmaligen Appwrite-Magic-Link; es werden keine Admin-Passwörter in dieser Anwendung gespeichert.
@@ -79,6 +79,8 @@ Das Projekt ist eine reguläre Next.js-App. In Appwrite Sites das Git-Repository
 - Runtime: Node.js 22
 
 Danach die oben genannten Site-Aliase sowie `DEV_ACCESS_PASSWORD`, `SITE_ACCESS_MODE=protected`, `BOOKING_MODE=test` und `NEXT_PUBLIC_SITE_URL` als Site-Variablen hinterlegen. `NEXT_PUBLIC_SITE_URL` muss der endgültigen HTTPS-Domain entsprechen, damit Canonical URL, Sitemap, Open Graph und strukturierte SEO-Daten korrekt sind. Änderungen an Site-Variablen erfordern ein neues Deployment.
+
+Auch der Admin-Magic-Link verwendet ausschließlich diese konfigurierte HTTPS-Adresse. Fehlt sie oder enthält sie noch den Platzhalter `deine-domain.at`, wird in Production bewusst kein Link erzeugt; damit kann keine interne `localhost`-Adresse mehr per E-Mail versendet werden.
 
 ## Sicherheit und Betrieb
 

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Account, Client } from 'node-appwrite';
 
-export const adminSessionCookie = 'panivr_admin_session';
+export const adminSessionCookie = 'virtual_raiders_admin_session';
 
 function appwriteClient() {
   const endpoint = process.env.PANIVR_APPWRITE_ENDPOINT || process.env.APPWRITE_ENDPOINT || process.env.APPWRITE_SITE_API_ENDPOINT;
@@ -50,8 +50,19 @@ export async function requireAdmin() {
 }
 
 export function trustedCallbackOrigin(requestOrigin: string) {
-  if (process.env.NODE_ENV === 'development' || process.env.SITE_ACCESS_MODE !== 'public') return requestOrigin;
-  const configured = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!configured || configured.includes('deine-domain')) throw new Error('Die öffentliche Site-URL ist noch nicht konfiguriert.');
-  return new URL(configured).origin;
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (configured && !/deine-domain|example\.(com|at)/i.test(configured)) {
+    const url = new URL(configured);
+    if (url.protocol !== 'https:' && !['localhost', '127.0.0.1'].includes(url.hostname)) {
+      throw new Error('Die öffentliche Site-URL muss HTTPS verwenden.');
+    }
+    return url.origin;
+  }
+
+  const fallback = new URL(requestOrigin);
+  if (process.env.NODE_ENV === 'development' && ['localhost', '127.0.0.1'].includes(fallback.hostname)) {
+    return fallback.origin;
+  }
+
+  throw new Error('NEXT_PUBLIC_SITE_URL muss auf die öffentliche HTTPS-Adresse der Website gesetzt werden.');
 }

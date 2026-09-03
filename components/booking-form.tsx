@@ -78,7 +78,7 @@ export function BookingForm() {
       setError(data.message || 'Das hat leider nicht geklappt. Bitte versuche es erneut.');
       return;
     }
-    setReference(data.reference || 'PANIVR');
+    setReference(data.reference || 'VRR');
     setDemo(Boolean(data.demo));
     setStep(3);
   }

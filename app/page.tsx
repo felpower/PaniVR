@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { ArrowDown, ArrowRight, Building2, CalendarCheck, Check, CirclePlay, Crosshair, Gamepad2, Gift, MapPin, Sparkles, Users, UtensilsCrossed, WifiOff, Zap } from 'lucide-react';
 import { BookingForm } from '@/components/booking-form';
+import { BrandIdentity } from '@/components/brand-identity';
+import { MobileBookingCta } from '@/components/mobile-booking-cta';
 import { brand, siteUrl } from '@/lib/brand';
 
 const facts = [
@@ -44,8 +46,7 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <header className="site-header">
         <a className="brand" href="#top" aria-label={`${brand.name} Startseite`}>
-          <span className="brand-mark" aria-hidden="true">P</span>
-          <span>Pani<span>VR</span></span>
+          <BrandIdentity />
         </a>
         <nav className="desktop-nav" aria-label="Hauptnavigation">
           <a href="#erlebnis">Erlebnis</a><a href="#ablauf">So läuft&apos;s</a><a href="#anlaesse">Für Gruppen</a><a href="#faq">FAQ</a>
@@ -65,7 +66,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="arena-card" aria-label="Abstrakte Darstellung der PaniVR Arena">
+        <div className="arena-card" aria-label={`Abstrakte Darstellung der ${brand.name} Arena`}>
           <div className="arena-scan" /><div className="arena-topline"><span>ARENA // LIVE</span><span className="live-dot">● 01</span></div>
           <div className="arena-visual"><span className="player player-one">P1</span><span className="player player-two">P2</span><span className="player player-three">P3</span><span className="target-ring" /></div>
           <div className="arena-bottom"><span><strong>100%</strong> kabellos</span><span><strong>360°</strong> Bewegung</span></div>
@@ -137,8 +138,8 @@ export default function Home() {
         <div className="location-card"><p className="section-kicker">Hier findet ihr uns</p><h2>Mitten im<br /><span>Ramingtal.</span></h2><address>{brand.venueName}<br />{brand.address.street}<br />{brand.address.postalCode} {brand.address.city}</address><a className="button" href={brand.mapsUrl} target="_blank" rel="noreferrer">Route planen <ArrowRight size={17} /></a></div>
       </section>
 
-      <footer><div className="footer-main"><a className="brand footer-brand" href="#top"><span className="brand-mark">P</span><span>Pani<span>VR</span></span></a><p>{brand.tagline}<br />Free-Roam VR bei Steyr.</p><a className="footer-cta" href="#buchen">Jetzt Termin sichern <ArrowRight /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {brand.name} · {brand.legalName}</span><nav><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href={`mailto:${brand.email}`}>Kontakt</a></nav></div></footer>
-      <a className="mobile-booking" href="#buchen">Termin reservieren <ArrowRight size={16} /></a>
+      <footer><div className="footer-main"><a className="brand footer-brand" href="#top" aria-label={`${brand.name} Startseite`}><BrandIdentity /></a><p>{brand.tagline}<br />Free-Roam VR bei Steyr.</p><a className="footer-cta" href="#buchen">Jetzt Termin sichern <ArrowRight /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {brand.name} · {brand.legalName}</span><nav><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href={`mailto:${brand.email}`}>Kontakt</a></nav></div></footer>
+      <MobileBookingCta />
     </main>
   );
 }

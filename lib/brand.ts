@@ -1,5 +1,5 @@
 export const brand = {
-  name: 'PaniVR',
+  name: 'VR Virtual Raiders',
   legalName: 'Josef Panholzer OG',
   tagline: 'Raus aus dem Alltag. Rein ins Spiel.',
   description:
