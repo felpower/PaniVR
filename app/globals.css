@@ -190,5 +190,6 @@ footer { padding:70px clamp(24px,7vw,110px) 30px; background:#031015; color:whit
 
 .legal-page { min-height:100vh; padding:45px 24px 100px; background:var(--paper); }.legal-brand { display:inline-flex; margin:0 auto 65px; font:700 20px var(--font-display); color:var(--ink); }.legal-page article { max-width:760px; margin:auto; }.legal-page h1 { margin:0 0 55px; font:700 clamp(55px,8vw,92px)/.95 var(--font-display); letter-spacing:-.07em; }.legal-page h2 { margin:38px 0 10px; font:700 23px var(--font-display); letter-spacing:-.035em; }.legal-page p { color:#4f5d61; line-height:1.75; }.legal-page a { text-decoration:underline; }.legal-page .legal-note { margin-top:50px; padding:20px; border-left:3px solid var(--coral); background:#e5e9e2; font-size:13px; }
 .venue-cards article { position:relative; overflow:hidden; }
-.venue-photo { position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover; opacity:.38; mix-blend-mode:multiply; filter:saturate(.8) contrast(1.08); }
+.venue-photo { position:relative; inset:auto; z-index:1; display:block; width:calc(100% + 80px); height:250px; margin:-50px -40px 34px; object-fit:cover; opacity:1; mix-blend-mode:normal; filter:none; }
 .venue-cards article>*:not(.venue-photo) { position:relative; z-index:1; }
+@media(max-width:760px) { .venue-photo { width:calc(100% + 44px); height:220px; margin:-50px -22px 30px; } }
