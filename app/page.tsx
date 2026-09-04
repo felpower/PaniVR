@@ -79,7 +79,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="ticker" aria-hidden="true"><div><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span><i>✦</i><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span></div></div>
+      <div className="ticker" aria-hidden="true"><div><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span><i>✦</i><span>VR SHOOTER</span><i>✦</i><span>PRIVATE ARENA</span><i>✦</i><span>TEAMPLAY</span><i>✦</i><span>VOLLE IMMERSION</span><i>✦</i><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span><i>✦</i><span>VR SHOOTER</span><i>✦</i><span>PRIVATE ARENA</span><i>✦</i><span>TEAMPLAY</span><i>✦</i><span>VOLLE IMMERSION</span></div></div>
 
       <section className="intro section-pad" id="erlebnis">
         <div className="section-heading">
@@ -130,7 +130,7 @@ export default function Home() {
       </section>
 
       <section className="faq section-pad" id="faq">
-        <div className="faq-heading"><p className="section-kicker">Gut zu wissen</p><h2>Fragen?<br /><span>Antworten.</span></h2><p>Noch etwas unklar? Ruft uns einfach an unter <a href={`tel:${brand.phoneHref}`}>{brand.phoneDisplay}</a>.</p></div>
+        <div className="faq-heading"><p className="section-kicker">Gut zu wissen</p><h2>Fragen?<br /><span>Antworten.</span></h2><p>Noch etwas unklar? Ruft uns einfach an unter <a href={`tel:${brand.phoneHref}`}>{brand.phoneDisplay}</a> oder schreibt uns direkt.</p><a className="faq-contact-link" href="/kontakt">Zum Kontaktformular <ArrowRight size={16} /></a></div>
         <div className="faq-list">{faqs.map(([question, answer], index) => <details key={question}><summary><span>{String(index + 1).padStart(2, '0')}</span>{question}<i>+</i></summary><p>{answer}</p></details>)}</div>
       </section>
 
