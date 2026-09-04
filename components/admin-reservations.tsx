@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { CalendarDays, CheckCircle2, Clock3, Mail, Phone, Search, Users, XCircle } from 'lucide-react';
+import { CalendarDays, CheckCircle2, Clock3, Mail, Phone, Search, Send, Users, XCircle } from 'lucide-react';
 
 export type AdminReservation = {
   id: string;
@@ -39,7 +39,7 @@ export function AdminReservations({ initialReservations }: { initialReservations
   }, [reservations, query, filter]);
 
   const today = new Date().toISOString().slice(0, 10);
-  const activeStatuses = ['test', 'confirmed'];
+  const activeStatuses = ['pending', 'test', 'confirmed'];
   const upcoming = reservations.filter((item) => item.date >= today && activeStatuses.includes(item.status)).length;
   const people = reservations.filter((item) => activeStatuses.includes(item.status)).reduce((sum, item) => sum + item.players, 0);
 
@@ -55,6 +55,7 @@ export function AdminReservations({ initialReservations }: { initialReservations
     }
     setReservations((current) => current.map((item) => item.id === id ? { ...item, status } : item));
   }
+  async function confirmAndNotify(reservation: AdminReservation) { setSaving(reservation.id); setError(''); const response = await fetch(`/api/admin/reservations/${encodeURIComponent(reservation.id)}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'confirmed', notify: true }) }); const data = await response.json().catch(() => ({})); setSaving(''); if (!response.ok) return setError(data.message || 'Die Bestätigung konnte nicht versendet werden.'); setReservations((current) => current.map((item) => item.id === reservation.id ? { ...item, status: 'confirmed' } : item)); }
 
   return (
     <>
@@ -65,10 +66,10 @@ export function AdminReservations({ initialReservations }: { initialReservations
       </section>
 
       <section className="admin-panel">
-        <div className="admin-panel-head"><div><p>Reservierungen</p><h2>Alle Buchungen</h2></div><div className="admin-tools"><label><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name, E-Mail, Datum …" /></label><select value={filter} onChange={(event) => setFilter(event.target.value)} aria-label="Nach Status filtern"><option value="all">Alle Status</option><option value="test">Test</option><option value="confirmed">Bestätigt</option><option value="completed">Erledigt</option><option value="cancelled">Storniert</option></select></div></div>
+        <div className="admin-panel-head"><div><p>Reservierungen</p><h2>Alle Buchungen</h2></div><div className="admin-tools"><label><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name, E-Mail, Datum …" /></label><select value={filter} onChange={(event) => setFilter(event.target.value)} aria-label="Nach Status filtern"><option value="all">Alle Status</option><option value="pending">Offen</option><option value="test">Test</option><option value="confirmed">Bestätigt</option><option value="completed">Erledigt</option><option value="cancelled">Storniert</option></select></div></div>
         {error && <p className="admin-error" role="alert">{error}</p>}
         {filtered.length ? (
-          <div className="admin-table-wrap"><table><thead><tr><th>Termin</th><th>Kontakt</th><th>Gruppe</th><th>Notiz</th><th>Status</th></tr></thead><tbody>{filtered.map((reservation) => <tr key={reservation.id}><td data-label="Termin"><strong>{displayDate(reservation.date)}</strong><span><Clock3 size={13} /> {reservation.slot} Uhr</span></td><td data-label="Kontakt"><strong>{reservation.name}</strong><a href={`mailto:${reservation.email}`}><Mail size={12} />{reservation.email}</a><a href={`tel:${reservation.phone}`}><Phone size={12} />{reservation.phone}</a></td><td data-label="Gruppe"><strong>{reservation.players} Personen</strong><span>{reservation.occasion || '–'}</span></td><td data-label="Notiz" className="admin-notes">{reservation.notes || '–'}</td><td data-label="Status"><select className={`status-select status-${reservation.status}`} value={reservation.status} disabled={saving === reservation.id} onChange={(event) => updateStatus(reservation.id, event.target.value)}><option value="test">Test</option><option value="confirmed">Bestätigt</option><option value="completed">Erledigt</option><option value="cancelled">Storniert</option></select></td></tr>)}</tbody></table></div>
+          <div className="admin-table-wrap"><table><thead><tr><th>Termin</th><th>Kontakt</th><th>Gruppe</th><th>Notiz</th><th>Status</th></tr></thead><tbody>{filtered.map((reservation) => <tr key={reservation.id}><td data-label="Termin"><strong>{displayDate(reservation.date)}</strong><span><Clock3 size={13} /> {reservation.slot} Uhr</span></td><td data-label="Kontakt"><strong>{reservation.name}</strong><a href={`mailto:${reservation.email}`}><Mail size={12} />{reservation.email}</a><a href={`tel:${reservation.phone}`}><Phone size={12} />{reservation.phone}</a></td><td data-label="Gruppe"><strong>{reservation.players} Personen</strong><span>{reservation.occasion || '–'}</span></td><td data-label="Notiz" className="admin-notes">{reservation.notes || '–'}</td><td data-label="Status"><select className={`status-select status-${reservation.status}`} value={reservation.status} disabled={saving === reservation.id} onChange={(event) => updateStatus(reservation.id, event.target.value)}><option value="pending">Offen</option><option value="test">Test</option><option value="confirmed">Bestätigt</option><option value="completed">Erledigt</option><option value="cancelled">Storniert</option></select>{['pending', 'test'].includes(reservation.status) && <button className="notify-button" disabled={saving === reservation.id} onClick={() => confirmAndNotify(reservation)}><Send size={13} /> Bestätigen & informieren</button>}</td></tr>)}</tbody></table></div>
         ) : <div className="admin-empty"><XCircle /><h3>Keine Reservierungen gefunden</h3><p>Ändere den Filter oder den Suchbegriff.</p></div>}
       </section>
     </>

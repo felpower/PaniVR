@@ -10,6 +10,7 @@ const facts = [
   { value: `${brand.booking.minimumPlayers}–${brand.booking.maximumPlayers}`, label: 'Spieler gleichzeitig' },
   { value: '100 %', label: 'exklusiv für euch' },
 ];
+const tickerItems = ['FREE-ROAM VR', 'TEAM VS TEAM', 'KABELLOS', 'MITTEN IM RAMINGTAL', 'VR SHOOTER', 'PRIVATE ARENA', 'TEAMPLAY', 'VOLLE IMMERSION', 'MISSION START', 'HEADSET ON', 'CO-OP ACTION', 'NO CABLES', 'READY PLAYER'];
 
 const faqs = [
   ['Was ist Free-Roam VR?', 'Ihr bewegt euch frei und ohne Kabel durch eine große reale Spielfläche. In der VR-Brille wird daraus eine virtuelle Arena – jede echte Bewegung wird direkt ins Spiel übertragen.'],
@@ -79,7 +80,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="ticker" aria-hidden="true"><div><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span><i>✦</i><span>VR SHOOTER</span><i>✦</i><span>PRIVATE ARENA</span><i>✦</i><span>TEAMPLAY</span><i>✦</i><span>VOLLE IMMERSION</span><i>✦</i><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span><i>✦</i><span>VR SHOOTER</span><i>✦</i><span>PRIVATE ARENA</span><i>✦</i><span>TEAMPLAY</span><i>✦</i><span>VOLLE IMMERSION</span></div></div>
+      <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0, 1].map((copy) => <div className="ticker-group" key={copy}>{tickerItems.map((item, index) => <span key={`${copy}-${item}`}>{item}{index < tickerItems.length - 1 && <i>✦</i>}</span>)}</div>)}</div></div>
 
       <section className="intro section-pad" id="erlebnis">
         <div className="section-heading">
@@ -139,7 +140,7 @@ export default function Home() {
         <div className="location-layout"><div className="location-card"><p className="section-kicker">Hier findet ihr uns</p><h2>Mitten im<br /><span>Ramingtal.</span></h2><address>{brand.venueName}<br />{brand.address.street}<br />{brand.address.postalCode} {brand.address.city}</address><a className="button" href={brand.mapsUrl} target="_blank" rel="noreferrer">Route planen <ArrowRight size={17} /></a></div><div className="location-map"><iframe title="Karte: VR Virtual Raiders in Kleinraming" src="https://www.google.com/maps?q=Ramingtalstra%C3%9Fe+18,+4442+Kleinraming&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div></div>
       </section>
 
-      <footer><div className="footer-main"><a className="brand footer-brand" href="#top" aria-label={`${brand.name} Startseite`}><BrandIdentity /></a><p>{brand.tagline}<br />Free-Roam VR bei Steyr.</p><a className="footer-cta" href="#buchen">Jetzt Termin sichern <ArrowRight /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {brand.name} · {brand.legalName}</span><nav><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href={`mailto:${brand.email}`}>Kontakt</a></nav></div></footer>
+      <footer><div className="footer-main"><a className="brand footer-brand" href="#top" aria-label={`${brand.name} Startseite`}><BrandIdentity /></a><p>{brand.tagline}<br />Free-Roam VR bei Steyr.</p><a className="footer-cta" href="#buchen">Jetzt Termin sichern <ArrowRight /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {brand.name} · {brand.legalName}</span><nav><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a  href="/kontakt">Kontakt</a></nav></div></footer>
       <MobileBookingCta />
     </main>
   );

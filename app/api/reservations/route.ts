@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         phone: result.data.phone,
         occasion: result.data.occasion,
         notes: result.data.notes,
-        status: bookingMode === 'live' ? 'confirmed' : 'test',
+        status: bookingMode === 'live' ? 'pending' : 'test',
         source: bookingMode === 'live' ? 'website' : 'website-test',
         createdAt: new Date().toISOString(),
       },
