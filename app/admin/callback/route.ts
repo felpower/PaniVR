@@ -5,7 +5,8 @@ import { adminSessionCookie, getAdminApiAccount, getSessionAccount, isAdminEmail
 export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
-  const userId = request.nextUrl.searchParams.get('userId') || '';
+  // Appwrite may serialize this parameter as `userid` in the emailed URL.
+  const userId = request.nextUrl.searchParams.get('userId') || request.nextUrl.searchParams.get('userid') || '';
   const secret = request.nextUrl.searchParams.get('secret') || '';
   if (!userId || !secret) return NextResponse.redirect(new URL('/admin/login?error=invalid', request.url));
 
