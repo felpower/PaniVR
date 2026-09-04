@@ -9,6 +9,7 @@ export const databaseId = process.env.PANIVR_APPWRITE_DATABASE_ID || process.env
 export const reservationsTableId = process.env.PANIVR_APPWRITE_RESERVATIONS_TABLE_ID || process.env.APPWRITE_RESERVATIONS_TABLE_ID || 'reservations';
 export const adminsTableId = process.env.PANIVR_APPWRITE_ADMINS_TABLE_ID || 'admins';
 export const contactTableId = process.env.PANIVR_APPWRITE_CONTACT_TABLE_ID || 'contact_requests';
+export const availabilityTableId = process.env.PANIVR_APPWRITE_AVAILABILITY_TABLE_ID || 'availability';
 
 export async function sendMailgunEmail(input: { to: string; subject: string; text: string; html: string }) {
   const key = process.env.PANIVR_MAILGUN_API_KEY || process.env.MAILGUN_API_KEY;

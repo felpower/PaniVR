@@ -1,11 +1,11 @@
 'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { CalendarDays, Check, ChevronLeft, Clock3, LoaderCircle, Minus, Plus, ShieldCheck, Users } from 'lucide-react';
+import { CalendarDays, Check, ChevronLeft, ChevronRight, Clock3, LoaderCircle, Minus, Plus, ShieldCheck, Users } from 'lucide-react';
 import { brand } from '@/lib/brand';
 import { getSlotsForDate } from '@/lib/booking';
 
-type Availability = { booked: string[]; configured?: boolean };
+type Availability = { booked: string[]; slots: string[]; configured?: boolean };
 
 function toLocalDateString(date: Date) {
   const year = date.getFullYear();
@@ -17,7 +17,7 @@ function toLocalDateString(date: Date) {
 function buildDates() {
   const dates: Date[] = [];
   const cursor = new Date();
-  for (let i = 1; i <= brand.booking.bookingWindowDays && dates.length < 12; i += 1) {
+  for (let i = 1; i <= brand.booking.bookingWindowDays; i += 1) {
     cursor.setDate(cursor.getDate() + 1);
     if (getSlotsForDate(toLocalDateString(cursor)).length) dates.push(new Date(cursor));
   }
@@ -30,26 +30,35 @@ export function BookingForm() {
   const [date, setDate] = useState(toLocalDateString(dates[0]));
   const [slot, setSlot] = useState('');
   const [players, setPlayers] = useState(4);
-  const [availability, setAvailability] = useState<Availability>({ booked: [] });
+  const [availability, setAvailability] = useState<Availability>({ booked: [], slots: getSlotsForDate(date) });
   const [loadingSlots, setLoadingSlots] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [reference, setReference] = useState('');
   const [demo, setDemo] = useState(false);
+  const [calendarMonth, setCalendarMonth] = useState(() => new Date(dates[0].getFullYear(), dates[0].getMonth(), 1));
 
   useEffect(() => {
     let active = true;
     fetch(`/api/availability?date=${date}`)
       .then((response) => response.json())
-      .then((data) => active && setAvailability({ booked: Array.isArray(data.booked) ? data.booked : [], configured: data.configured }))
-      .catch(() => active && setAvailability({ booked: [] }))
+      .then((data) => active && setAvailability({ booked: Array.isArray(data.booked) ? data.booked : [], slots: Array.isArray(data.slots) ? data.slots : getSlotsForDate(date), configured: data.configured }))
+      .catch(() => active && setAvailability({ booked: [], slots: getSlotsForDate(date) }))
       .finally(() => active && setLoadingSlots(false));
     return () => { active = false; };
   }, [date]);
 
   const selectedDate = new Date(`${date}T12:00:00`);
   const formattedDate = new Intl.DateTimeFormat('de-AT', { weekday: 'long', day: '2-digit', month: 'long' }).format(selectedDate);
-  const slots = getSlotsForDate(date);
+  const slots = availability.slots;
+  const firstMonth = new Date(dates[0].getFullYear(), dates[0].getMonth(), 1).getTime();
+  const lastMonth = new Date(dates[dates.length - 1].getFullYear(), dates[dates.length - 1].getMonth(), 1).getTime();
+  const calendarCells = useMemo(() => {
+    const first = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
+    const offset = (first.getDay() + 6) % 7;
+    const count = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 0).getDate();
+    return [...Array(offset).fill(null), ...Array.from({ length: count }, (_, index) => new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), index + 1))];
+  }, [calendarMonth]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -109,18 +118,7 @@ export function BookingForm() {
             <span><CalendarDays size={18} /> Verfügbare Termine</span>
             <small>Bis 6 Wochen im Voraus</small>
           </div>
-          <div className="date-strip">
-            {dates.map((item) => {
-              const value = toLocalDateString(item);
-              return (
-                <button key={value} type="button" className={date === value ? 'selected' : ''} onClick={() => { setDate(value); setSlot(''); setLoadingSlots(true); }}>
-                  <small>{new Intl.DateTimeFormat('de-AT', { weekday: 'short' }).format(item).replace('.', '')}</small>
-                  <strong>{item.getDate()}</strong>
-                  <span>{new Intl.DateTimeFormat('de-AT', { month: 'short' }).format(item).replace('.', '')}</span>
-                </button>
-              );
-            })}
-          </div>
+          <div className="calendar"><div className="calendar-head"><button type="button" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))} disabled={calendarMonth.getTime() <= firstMonth} aria-label="Vorheriger Monat"><ChevronLeft size={18}/></button><strong>{new Intl.DateTimeFormat('de-AT', { month: 'long', year: 'numeric' }).format(calendarMonth)}</strong><button type="button" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))} disabled={calendarMonth.getTime() >= lastMonth} aria-label="Nächster Monat"><ChevronRight size={18}/></button></div><div className="calendar-weekdays">{['Mo','Di','Mi','Do','Fr','Sa','So'].map(day => <span key={day}>{day}</span>)}</div><div className="calendar-grid">{calendarCells.map((item, index) => { if (!item) return <span className="calendar-empty" key={`empty-${index}`}/>; const value=toLocalDateString(item); const enabled=dates.some(d=>toLocalDateString(d)===value); return <button key={value} type="button" disabled={!enabled} className={date===value?'selected':''} onClick={()=>{setDate(value);setSlot('');setLoadingSlots(true)}}><span>{item.getDate()}</span>{enabled&&<small/>}</button>; })}</div></div>
 
           <div className="slot-block">
             <span className="field-label"><Clock3 size={16} /> Uhrzeit</span>

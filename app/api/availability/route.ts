@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Query } from 'node-appwrite';
 import { appwriteConfigured, databaseId, getTablesDB, reservationsTableId } from '@/lib/appwrite-server';
 import { isBookableDate } from '@/lib/booking';
+import { getAvailableSlots } from '@/lib/availability';
 
 export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   const date = request.nextUrl.searchParams.get('date') || '';
-  if (!isBookableDate(date)) return NextResponse.json({ booked: [] });
+  if (!isBookableDate(date)) return NextResponse.json({ booked: [], slots: [] });
   if (!appwriteConfigured) return NextResponse.json({ booked: [], configured: false });
 
   try {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
       total: false,
       ttl: 0,
     });
-    return NextResponse.json({ booked: result.rows.map((row) => String(row.slot)), configured: true });
+    return NextResponse.json({ booked: result.rows.map((row) => String(row.slot)), slots: await getAvailableSlots(date), configured: true });
   } catch {
     return NextResponse.json({ message: 'Verfügbarkeiten konnten nicht geladen werden.' }, { status: 503 });
   }

@@ -22,11 +22,16 @@ export const brand = {
     maximumPlayers: 10,
     bookingWindowDays: 42,
     slotDurationMinutes: 120,
+    // Startzeiten nach dem aktuellen VRFrag-Raster (2-Stunden-Sessions).
+    // Die Öffnungszeiten/Slots können später im Admin-Bereich überschrieben werden.
     slotsByWeekday: {
-      0: ['11:00', '14:00'],
-      1: ['16:00', '19:00'],
-      5: ['16:00', '19:00'],
-      6: ['11:00', '14:00', '17:00', '20:00'],
+      0: ['12:30', '14:30', '16:30', '18:30', '20:30'], // Sonntag
+      1: ['16:30', '18:30', '20:30'], // Montag
+      2: ['16:30', '18:30', '20:30'], // Dienstag
+      3: ['16:30', '18:30', '20:30'], // Mittwoch
+      4: ['16:30', '18:30', '20:30'], // Donnerstag
+      5: ['12:30', '14:30', '16:30', '18:30', '20:30'], // Freitag
+      6: ['08:30', '10:30', '12:30', '14:30', '16:30', '18:30', '20:30'], // Samstag
     } as Record<number, string[]>,
   },
 } as const;
