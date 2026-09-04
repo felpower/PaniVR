@@ -6,6 +6,9 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
   turbopack: { root: projectRoot },
+  // Permit the current LAN device to load HMR and dev chunks when testing
+  // the site from a phone. This only affects `next dev`, never production.
+  allowedDevOrigins: ['192.168.88.131'],
   // Appwrite Sites serves bundled public assets correctly, but its current
   // Next.js SSR image endpoint rejects those same assets during optimization.
   // Serving our local, already-sized assets directly avoids broken images.
