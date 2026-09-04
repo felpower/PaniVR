@@ -15,7 +15,6 @@ export default function Impressum() {
         <p>Telefon: <a href="tel:+43725230729">07252 / 30729</a><br />Mobil: <a href={`tel:${brand.phoneHref}`}>{brand.phoneDisplay}</a><br />E-Mail: <a href="mailto:markus.panholzer93@gmx.at">markus.panholzer93@gmx.at</a><br />UID-Nr.: ATU 60803759</p>
         <h2>Unternehmensgegenstand</h2><p>Gastgewerbe sowie Freizeitangebote (Free-Roam-VR). Weitere gesetzlich erforderliche Angaben, insbesondere Firmenbuch- und Aufsichtsbehördendaten, werden nach Betreiberfreigabe ergänzt.</p>
         <h2>Haftung</h2><p>Die Inhalte dieser Website werden mit größtmöglicher Sorgfalt erstellt. Für Inhalte externer Links sind ausschließlich deren Betreiber verantwortlich.</p>
-        <p className="legal-note">Hinweis: Diese Seite ist ein redaktioneller Entwurf und muss vor dem Livegang rechtlich geprüft und vervollständigt werden.</p>
       </article>
     </main>
   );
