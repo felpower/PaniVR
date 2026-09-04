@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   // Appwrite Sites serves bundled public assets correctly, but its current
   // Next.js SSR image endpoint rejects those same assets during optimization.
   // Serving our local, already-sized assets directly avoids broken images.
-  images: { unoptimized: true },
+  images: { unoptimized: true, remotePatterns: [{ protocol: 'https', hostname: 'www.gasthaus-panholzer.at', pathname: '/userupload/**' }] },
   async headers() {
     return [{
       source: '/(.*)',
