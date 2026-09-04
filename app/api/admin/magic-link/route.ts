@@ -28,7 +28,8 @@ export async function POST(request: NextRequest) {
       phrase: false,
     });
     return NextResponse.json({ message: genericMessage });
-  } catch {
+  } catch (error) {
+    console.error('Admin magic-link failed:', error);
     return NextResponse.json({ message: 'Der Anmeldelink konnte derzeit nicht versendet werden. Bitte prüfe die Appwrite-Konfiguration.' }, { status: 503 });
   }
 }
