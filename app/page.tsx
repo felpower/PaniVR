@@ -113,9 +113,9 @@ export default function Home() {
       <section className="occasions section-pad" id="anlaesse">
         <div className="occasion-intro"><p className="section-kicker">Für eure Crew</p><h2>Ein Erlebnis,<br />das <span>verbindet.</span></h2><p>Aus einer freien Halle wird euer nächstes Highlight – für kleine Teams genauso wie für den großen Anlass.</p></div>
         <div className="occasion-list">
-          <a className="occasion-item" href="#buchen"><Users /><div><h3>Freunde & Vereine</h3><p>Gemeinsam statt gegeneinander auf der Couch.</p></div><ArrowRight /></a>
-          <a className="occasion-item" href="#buchen"><Gift /><div><h3>Geburtstag & Polterer</h3><p>Adrenalin, Teamgeist und danach anstoßen.</p></div><ArrowRight /></a>
-          <a className="occasion-item" href={`mailto:${brand.email}?subject=Anfrage%20für%20ein%20Firmenevent`}><Building2 /><div><h3>Firmen & Teamevents</h3><p>Neue Rollen, echte Kommunikation, starkes Team.</p></div><ArrowRight /></a>
+          <a className="occasion-item" href="/kontakt?subject=Freunde%20%26%20Vereine"><Users /><div><h3>Freunde & Vereine</h3><p>Gemeinsam statt gegeneinander auf der Couch.</p></div><ArrowRight /></a>
+          <a className="occasion-item" href="/kontakt?subject=Geburtstag%20%26%20Polterer"><Gift /><div><h3>Geburtstag & Polterer</h3><p>Adrenalin, Teamgeist und danach anstoßen.</p></div><ArrowRight /></a>
+          <a className="occasion-item" href="/kontakt?subject=Firmen%20%26%20Teamevent"><Building2 /><div><h3>Firmen & Teamevents</h3><p>Neue Rollen, echte Kommunikation, starkes Team.</p></div><ArrowRight /></a>
         </div>
       </section>
 
