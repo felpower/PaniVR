@@ -1,7 +1,8 @@
 import 'server-only';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { Account, Client } from 'node-appwrite';
+import { Account, Client, Query } from 'node-appwrite';
+import { adminsTableId, databaseId, getTablesDB } from '@/lib/appwrite-server';
 
 export const adminSessionCookie = 'virtual_raiders_admin_session';
 
@@ -31,6 +32,26 @@ export function isAllowedAdmin(email: string) {
   return getAllowedAdminEmails().includes(email.trim().toLowerCase());
 }
 
+export async function isAdminEmail(email: string) {
+  const normalized = email.trim().toLowerCase();
+  if (isAllowedAdmin(normalized)) return true;
+  try {
+    const result = await getTablesDB().listRows({ databaseId, tableId: adminsTableId, queries: [Query.equal('email', [normalized]), Query.equal('status', ['active']), Query.limit(1)], total: false, ttl: 0 });
+    return result.rows.length > 0;
+  } catch {
+    // The table is optional during bootstrap; the environment allowlist remains valid.
+    return false;
+  }
+}
+
+export async function getAdminRole(email: string) {
+  if (isAllowedAdmin(email)) return 'owner' as const;
+  try {
+    const result = await getTablesDB().listRows({ databaseId, tableId: adminsTableId, queries: [Query.equal('email', [email.trim().toLowerCase()]), Query.equal('status', ['active']), Query.limit(1)], total: false, ttl: 0 });
+    return String(result.rows[0]?.role || 'admin') as 'owner' | 'admin' | 'readonly';
+  } catch { return null; }
+}
+
 export async function getCurrentAdmin() {
   // Local-only escape hatch for testing the admin UI without sending a magic
   // link. Production builds can never use this path, even if the variable is
@@ -43,7 +64,7 @@ export async function getCurrentAdmin() {
   if (!sessionSecret) return null;
   try {
     const user = await getSessionAccount(sessionSecret).get();
-    if (!isAllowedAdmin(user.email)) return null;
+    if (!(await isAdminEmail(user.email))) return null;
     return { user, sessionSecret };
   } catch {
     return null;

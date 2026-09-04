@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ID } from 'node-appwrite';
-import { getAdminApiAccount, isAllowedAdmin, trustedCallbackOrigin } from '@/lib/admin-auth';
+import { getAdminApiAccount, isAdminEmail, trustedCallbackOrigin } from '@/lib/admin-auth';
 
 export const runtime = 'nodejs';
 
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   }
 
   const genericMessage = 'Wenn diese Adresse als Admin freigeschaltet ist, wurde ein Anmeldelink versendet.';
-  if (!isAllowedAdmin(email)) return NextResponse.json({ message: genericMessage });
+  if (!(await isAdminEmail(email))) return NextResponse.json({ message: genericMessage });
 
   try {
     const origin = trustedCallbackOrigin(request.nextUrl.origin);

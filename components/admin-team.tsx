@@ -1,0 +1,12 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { UserPlus, UserX } from 'lucide-react';
+
+type Admin = { id: string; email: string; name: string; role: string; status: string };
+export function AdminTeam() {
+  const [admins, setAdmins] = useState<Admin[]>([]); const [email, setEmail] = useState(''); const [name, setName] = useState(''); const [role, setRole] = useState('admin'); const [message, setMessage] = useState(''); const [loading, setLoading] = useState(true);
+  useEffect(() => { fetch('/api/admin/team').then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d.message); setAdmins(d.admins); }).catch((e) => setMessage(e.message)).finally(() => setLoading(false)); }, []);
+  async function add(event: React.FormEvent) { event.preventDefault(); setMessage(''); const r = await fetch('/api/admin/team', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, name, role }) }); const d = await r.json(); if (!r.ok) return setMessage(d.message); setAdmins((a) => [...a, d.admin]); setEmail(''); setName(''); setMessage('Admin hinzugefügt.'); }
+  async function toggle(a: Admin) { const status = a.status === 'active' ? 'inactive' : 'active'; const r = await fetch('/api/admin/team', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: a.id, status }) }); if (r.ok) setAdmins((all) => all.map((x) => x.id === a.id ? { ...x, status } : x)); }
+  return <section className="admin-panel team-panel"><div className="admin-panel-head"><div><p>Team</p><h2>Admins verwalten</h2></div></div><form className="team-form" onSubmit={add}><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name (optional)" /><input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-Mail-Adresse" /><select value={role} onChange={(e) => setRole(e.target.value)}><option value="admin">Admin</option><option value="readonly">Nur lesen</option></select><button type="submit"><UserPlus size={16} /> Hinzufügen</button></form>{message && <p className="admin-error">{message}</p>}{!loading && <div className="team-list">{admins.map((a) => <div className="team-row" key={a.id}><div><strong>{a.name || a.email}</strong><span>{a.email} · {a.role === 'readonly' ? 'Nur lesen' : 'Admin'}</span></div><button onClick={() => toggle(a)} aria-label={a.status === 'active' ? 'Deaktivieren' : 'Aktivieren'}><UserX size={16} /> {a.status === 'active' ? 'Deaktivieren' : 'Aktivieren'}</button></div>)}</div>}</section>;
+}

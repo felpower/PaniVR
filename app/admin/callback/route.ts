@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { adminSessionCookie, getAdminApiAccount, getSessionAccount, isAllowedAdmin } from '@/lib/admin-auth';
+import { adminSessionCookie, getAdminApiAccount, getSessionAccount, isAdminEmail } from '@/lib/admin-auth';
 
 export const runtime = 'nodejs';
 
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getAdminApiAccount().createSession({ userId, secret });
     const user = await getSessionAccount(session.secret).get();
-    if (!isAllowedAdmin(user.email)) {
+    if (!(await isAdminEmail(user.email))) {
       await getSessionAccount(session.secret).deleteSession({ sessionId: 'current' }).catch(() => undefined);
       return NextResponse.redirect(new URL('/admin/login?error=denied', request.url));
     }

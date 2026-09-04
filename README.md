@@ -31,6 +31,7 @@ Lokale Secrets gehören ausschließlich in eine ignorierte `.env` oder `.env.loc
 | `APPWRITE_DATABASE_ID` | standardmäßig `panivr` |
 | `APPWRITE_RESERVATIONS_TABLE_ID` | standardmäßig `reservations` |
 | `APPWRITE_ADMIN_EMAILS` | freigeschaltete Admin-Adressen, kommasepariert |
+| `PANIVR_APPWRITE_ADMINS_TABLE_ID` | optional, standardmäßig `admins` |
 
 Auf Appwrite Sites dürfen eigene Variablen nicht mit `APPWRITE_` beginnen. Dort werden deshalb die Aliase `PANIVR_APPWRITE_ENDPOINT`, `PANIVR_APPWRITE_PROJECT_ID`, `PANIVR_APPWRITE_API_KEY`, `PANIVR_APPWRITE_DATABASE_ID`, `PANIVR_APPWRITE_RESERVATIONS_TABLE_ID` und `PANIVR_ADMIN_EMAILS` verwendet. Der API-Key und das Development-Passwort müssen als Secret markiert werden.
 
@@ -70,6 +71,10 @@ Name, Kontaktdaten, Adresse, Gruppengröße, Buchungsfenster und Zeitslots werde
 6. Die Werte lokal in einer ignorierten `.env` oder `.env.local` einsetzen. Den API-Key niemals mit `NEXT_PUBLIC_` kennzeichnen.
 
 Für mehrere Administratoren werden die freigeschalteten E-Mail-Adressen kommasepariert in `APPWRITE_ADMIN_EMAILS` eingetragen. Die Anmeldung erfolgt über einen einmaligen Appwrite-Magic-Link; es werden keine Admin-Passwörter in dieser Anwendung gespeichert.
+
+Nach dem Anlegen der optionalen Tabelle `admins` können Owner weitere Admins direkt unter `/admin/team` hinzufügen oder deaktivieren. Die Bootstrap-Adresse aus `APPWRITE_ADMIN_EMAILS` bleibt dabei immer Owner und ermöglicht die Wiederherstellung des Zugriffs.
+
+Für die Tabelle `admins` werden die Spalten `email` (String/E-Mail, 254, Pflicht), `name` (String, 100, Pflicht), `role` (String, 20, Pflicht), `status` (String, 20, Pflicht) und `createdAt` (Datetime, Pflicht) benötigt. Öffentliche Tabellen- und Zeilenberechtigungen bleiben leer; die Website greift ausschließlich serverseitig zu.
 
 Die Reservierungsroute validiert alle Felder serverseitig und verwendet Datum plus Uhrzeit als eindeutige Row-ID. Damit kann derselbe Slot auch bei nahezu gleichzeitigen Anfragen nicht doppelt vergeben werden.
 

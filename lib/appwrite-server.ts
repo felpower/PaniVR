@@ -7,6 +7,7 @@ const apiKey = process.env.PANIVR_APPWRITE_API_KEY || process.env.APPWRITE_API_K
 export const appwriteConfigured = Boolean(endpoint && projectId && apiKey);
 export const databaseId = process.env.PANIVR_APPWRITE_DATABASE_ID || process.env.APPWRITE_DATABASE_ID || 'panivr';
 export const reservationsTableId = process.env.PANIVR_APPWRITE_RESERVATIONS_TABLE_ID || process.env.APPWRITE_RESERVATIONS_TABLE_ID || 'reservations';
+export const adminsTableId = process.env.PANIVR_APPWRITE_ADMINS_TABLE_ID || 'admins';
 
 export function getTablesDB() {
   if (!endpoint || !projectId || !apiKey) {
