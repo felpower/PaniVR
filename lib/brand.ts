@@ -17,6 +17,8 @@ export const brand = {
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Ramingtalstraße+18,+4442+Kleinraming',
   venueName: 'Gasthaus zur Linde & Pani’s Gästezimmer',
   booking: {
+    price: 45,
+    discountedPrice: 40,
     // Vorläufige Platzhalter bis der Betreiber die echten Spieldaten bestätigt.
     minimumPlayers: 2,
     maximumPlayers: 10,
@@ -34,6 +36,6 @@ export const brand = {
       6: ['08:30', '10:30', '12:30', '14:30', '16:30', '18:30', '20:30'], // Samstag
     } as Record<number, string[]>,
   },
-} as const;
+};
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';

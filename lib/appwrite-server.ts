@@ -1,7 +1,9 @@
-import { Client, TablesDB } from 'node-appwrite';
+import { Account, Client, TablesDB, Users } from 'node-appwrite';
 
 const endpoint = process.env.PANIVR_APPWRITE_ENDPOINT || process.env.APPWRITE_ENDPOINT || process.env.APPWRITE_SITE_API_ENDPOINT;
 const projectId = process.env.PANIVR_APPWRITE_PROJECT_ID || process.env.APPWRITE_PROJECT_ID || process.env.APPWRITE_SITE_PROJECT_ID;
+export const publicAppwriteEndpoint = endpoint;
+export const publicAppwriteProjectId = projectId;
 const apiKey = process.env.PANIVR_APPWRITE_API_KEY || process.env.APPWRITE_API_KEY;
 
 export const appwriteConfigured = Boolean(endpoint && projectId && apiKey);
@@ -10,6 +12,8 @@ export const reservationsTableId = process.env.PANIVR_APPWRITE_RESERVATIONS_TABL
 export const adminsTableId = process.env.PANIVR_APPWRITE_ADMINS_TABLE_ID || 'admins';
 export const contactTableId = process.env.PANIVR_APPWRITE_CONTACT_TABLE_ID || 'contact_requests';
 export const availabilityTableId = process.env.PANIVR_APPWRITE_AVAILABILITY_TABLE_ID || 'availability';
+export const settingsTableId = process.env.PANIVR_APPWRITE_SETTINGS_TABLE_ID || 'settings';
+export const playerScoresTableId = process.env.PANIVR_APPWRITE_PLAYER_SCORES_TABLE_ID || 'player_scores';
 
 export async function sendMailgunEmail(input: { to: string; subject: string; text: string; html: string }) {
   const key = process.env.PANIVR_MAILGUN_API_KEY || process.env.MAILGUN_API_KEY;
@@ -30,3 +34,5 @@ export function getTablesDB() {
   const client = new Client().setEndpoint(endpoint).setProject(projectId).setKey(apiKey);
   return new TablesDB(client);
 }
+export function getUsers() { if (!endpoint || !projectId || !apiKey) throw new Error('Appwrite ist noch nicht konfiguriert.'); return new Users(new Client().setEndpoint(endpoint).setProject(projectId).setKey(apiKey)); }
+export function getAccountWithJwt(jwt: string) { if (!endpoint || !projectId || !jwt) throw new Error('Appwrite ist noch nicht konfiguriert.'); return new Account(new Client().setEndpoint(endpoint).setProject(projectId).setJWT(jwt)); }

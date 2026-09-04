@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { ArrowDown, ArrowRight, Building2, CalendarCheck, Check, CirclePlay, Crosshair, Gamepad2, Gift, MapPin, Sparkles, Users, UtensilsCrossed, WifiOff, Zap } from 'lucide-react';
 import { BookingForm } from '@/components/booking-form';
 import { BrandIdentity } from '@/components/brand-identity';
+import { PricingHighlight } from '@/components/pricing-highlight';
 import { MobileBookingCta } from '@/components/mobile-booking-cta';
 import { brand, siteUrl } from '@/lib/brand';
 
@@ -24,13 +25,23 @@ const faqs = [
 export default function Home() {
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'EntertainmentBusiness',
+    '@type': ['EntertainmentBusiness', 'LocalBusiness'],
     name: brand.name,
     description: brand.description,
     url: siteUrl,
     telephone: brand.phoneHref,
     email: brand.email,
     image: `${siteUrl}/og.png`,
+    logo: `${siteUrl}/vr-virtual-raiders-logo.jpeg`,
+    priceRange: '€€',
+    areaServed: ['Kleinraming', 'Steyr', 'Oberösterreich'],
+    hasMap: brand.mapsUrl,
+    openingHoursSpecification: [
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '16:30', closes: '22:30' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Friday', 'Sunday'], opens: '12:30', closes: '22:30' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '08:30', closes: '22:30' },
+    ],
+    sameAs: ['https://www.gasthaus-panholzer.at/'],
     address: {
       '@type': 'PostalAddress',
       streetAddress: brand.address.street,
@@ -41,16 +52,18 @@ export default function Home() {
     },
     parentOrganization: { '@type': 'Organization', name: brand.legalName },
   };
+  const faqStructuredData = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([question, answer]) => ({ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } })) };
 
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }} />
       <header className="site-header">
         <a className="brand" href="#top" aria-label={`${brand.name} Startseite`}>
           <BrandIdentity />
         </a>
         <nav className="desktop-nav" aria-label="Hauptnavigation">
-          <a href="#erlebnis">Erlebnis</a><a href="#ablauf">So läuft&apos;s</a><a href="#anlaesse">Für Gruppen</a><a href="#faq">FAQ</a>
+          <a href="#erlebnis">Erlebnis</a><a href="#ablauf">So läuft&apos;s</a><a href="#anlaesse">Für Gruppen</a><a href="/event">Preise & Events</a><a href="/leaderboard">Leaderboard</a><a href="/spieler">Spielerbereich</a><a href="#faq">FAQ</a>
         </nav>
         <a className="button button-small" href="#buchen">Termin sichern</a>
       </header>
@@ -126,7 +139,7 @@ export default function Home() {
       </section>
 
       <section className="booking-section section-pad" id="buchen">
-        <div className="booking-intro"><p className="section-kicker">Online reservieren</p><h2>Eure Mission<br />startet <span>hier.</span></h2><p>Wählt euren Wunschtermin. Keine Online-Zahlung, keine fremden Mitspieler – die Arena gehört euch.</p><ul><li><Check /> Kostenlos reservieren</li><li><Check /> Exklusiver Termin</li><li><Check /> Änderung telefonisch möglich</li></ul></div>
+        <div className="booking-intro"><p className="section-kicker">Online reservieren</p><h2>Eure Mission<br />startet <span>hier.</span></h2><p>Wählt euren Wunschtermin. Keine Online-Zahlung, keine fremden Mitspieler – die Arena gehört euch.</p><ul><li><Check /> Kostenlos reservieren</li><li><Check /> Exklusiver Termin</li><li><Check /> Änderung telefonisch möglich</li></ul><PricingHighlight /></div>
         <BookingForm />
       </section>
 
@@ -140,7 +153,7 @@ export default function Home() {
         <div className="location-layout"><div className="location-card"><p className="section-kicker">Hier findet ihr uns</p><h2>Mitten im<br /><span>Ramingtal.</span></h2><address>{brand.venueName}<br />{brand.address.street}<br />{brand.address.postalCode} {brand.address.city}</address><a className="button" href={brand.mapsUrl} target="_blank" rel="noreferrer">Route planen <ArrowRight size={17} /></a></div><div className="location-map"><iframe title="Karte: VR Virtual Raiders in Kleinraming" src="https://www.google.com/maps?q=Ramingtalstra%C3%9Fe+18,+4442+Kleinraming&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div></div>
       </section>
 
-      <footer><div className="footer-main"><a className="brand footer-brand" href="#top" aria-label={`${brand.name} Startseite`}><BrandIdentity /></a><p>{brand.tagline}<br />Free-Roam VR bei Steyr.</p><a className="footer-cta" href="#buchen">Jetzt Termin sichern <ArrowRight /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {brand.name} · {brand.legalName}</span><a className="creator-link" href="https://felpower-software.com/" target="_blank" rel="noreferrer">Website erstellt von Felpower Software</a><nav><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href="/kontakt">Kontakt</a><a href="/admin/login">Admin-Bereich</a></nav></div></footer>
+      <footer><div className="footer-main"><a className="brand footer-brand" href="#top" aria-label={`${brand.name} Startseite`}><BrandIdentity /></a><p>{brand.tagline}<br />Free-Roam VR bei Steyr.</p><a className="footer-cta" href="#buchen">Jetzt Termin sichern <ArrowRight /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {brand.name} · {brand.legalName}</span><a className="creator-link" href="https://felpower-software.com/" target="_blank" rel="noreferrer">Website erstellt von Felpower Software</a><nav><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href="/agb">Stornobedingungen</a><a href="/kontakt">Kontakt</a><a href="/admin/login">Admin-Bereich</a></nav></div></footer>
       <MobileBookingCta />
     </main>
   );

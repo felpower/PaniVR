@@ -140,7 +140,7 @@ export function BookingForm() {
           </div>
 
           <button className="booking-next" type="button" disabled={!slot} onClick={() => setStep(2)}>Weiter zu den Kontaktdaten <span>↗</span></button>
-          <p className="booking-hint"><ShieldCheck size={15} /> Keine Zahlung nötig · Der Termin ist exklusiv für eure Gruppe</p>
+          <p className="booking-hint"><ShieldCheck size={15} /> Keine Anzahlung nötig · Der Termin ist exklusiv für eure Gruppe</p>
         </div>
       ) : (
         <form className="booking-step contact-step" onSubmit={submit}>
@@ -158,7 +158,7 @@ export function BookingForm() {
             <label className="full-width">Noch etwas, das wir wissen sollen?<textarea name="notes" rows={3} placeholder="Optional" /></label>
             <label className="honey" aria-hidden="true">Firma<input name="company" tabIndex={-1} autoComplete="off" /></label>
           </div>
-          <label className="consent"><input type="checkbox" name="consent" required /><span>Ich stimme der Verarbeitung meiner Angaben zur Durchführung der Reservierung zu und habe die <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> gelesen.</span></label>
+          <label className="consent"><input type="checkbox" name="consent" required /><span>Ich stimme der Verarbeitung meiner Angaben zur Durchführung der Reservierung zu und habe die <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> sowie die <a href="/agb" target="_blank">Stornobedingungen</a> gelesen.</span></label>
           {error && <p className="form-error" role="alert">{error}</p>}
           <button className="booking-next" type="submit" disabled={submitting}>{submitting ? <><LoaderCircle className="spin" size={19} /> Wird reserviert …</> : <>Kostenlos reservieren <span>↗</span></>}</button>
         </form>
