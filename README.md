@@ -13,6 +13,8 @@ Ohne Appwrite-Zugangsdaten läuft der komplette Buchungsablauf lokal im Demo-Mod
 
 Für `npm run dev` ist `DEV_ACCESS_PASSWORD` optional. Fehlt es, bleibt die lokale Entwicklung zugänglich und erhält weiterhin `noindex`-Header. Ein Production-Start und die veröffentlichte Vorschau bleiben dagegen ohne konfiguriertes Passwort geschlossen.
 
+Für einen lokalen Admin-UI-Test ohne E-Mail kann zusätzlich `DEV_ADMIN_BYPASS=true` gesetzt werden. Dieser Bypass ist ausschließlich in `NODE_ENV=development` aktiv und wird in Production-Builds ignoriert. Vor dem öffentlichen Launch muss die Variable entfernt oder auf `false` gesetzt werden.
+
 Die Development-Version arbeitet mit `SITE_ACCESS_MODE=protected` und `BOOKING_MODE=test`. Dadurch ist die gesamte Site inklusive APIs passwortgeschützt, Suchmaschinen werden abgewiesen und gespeicherte Reservierungen sind eindeutig als `test` markiert. Erst für den echten Livegang werden beide Werte bewusst auf `public` beziehungsweise `live` geändert.
 
 Lokale Secrets gehören ausschließlich in eine ignorierte `.env` oder `.env.local`. Es wird absichtlich keine `.env.example` versioniert. Benötigte Variablennamen:

@@ -32,6 +32,13 @@ export function isAllowedAdmin(email: string) {
 }
 
 export async function getCurrentAdmin() {
+  // Local-only escape hatch for testing the admin UI without sending a magic
+  // link. Production builds can never use this path, even if the variable is
+  // accidentally present in the hosting environment.
+  if (process.env.NODE_ENV === 'development' && process.env.DEV_ADMIN_BYPASS === 'true') {
+    return { user: { name: 'Development Admin', email: getAllowedAdminEmails()[0] || 'info@felpower-software.com' }, sessionSecret: '' };
+  }
+
   const sessionSecret = (await cookies()).get(adminSessionCookie)?.value;
   if (!sessionSecret) return null;
   try {
