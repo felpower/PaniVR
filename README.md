@@ -32,6 +32,7 @@ Lokale Secrets gehören ausschließlich in eine ignorierte `.env` oder `.env.loc
 | `APPWRITE_RESERVATIONS_TABLE_ID` | standardmäßig `reservations` |
 | `APPWRITE_ADMIN_EMAILS` | freigeschaltete Admin-Adressen, kommasepariert |
 | `PANIVR_APPWRITE_ADMINS_TABLE_ID` | optional, standardmäßig `admins` |
+| `PANIVR_APPWRITE_CONTACT_TABLE_ID` | optional, standardmäßig `contact_requests` |
 
 Auf Appwrite Sites dürfen eigene Variablen nicht mit `APPWRITE_` beginnen. Dort werden deshalb die Aliase `PANIVR_APPWRITE_ENDPOINT`, `PANIVR_APPWRITE_PROJECT_ID`, `PANIVR_APPWRITE_API_KEY`, `PANIVR_APPWRITE_DATABASE_ID`, `PANIVR_APPWRITE_RESERVATIONS_TABLE_ID` und `PANIVR_ADMIN_EMAILS` verwendet. Der API-Key und das Development-Passwort müssen als Secret markiert werden.
 
@@ -73,6 +74,8 @@ Name, Kontaktdaten, Adresse, Gruppengröße, Buchungsfenster und Zeitslots werde
 Für mehrere Administratoren werden die freigeschalteten E-Mail-Adressen kommasepariert in `APPWRITE_ADMIN_EMAILS` eingetragen. Die Anmeldung erfolgt über einen einmaligen Appwrite-Magic-Link; es werden keine Admin-Passwörter in dieser Anwendung gespeichert.
 
 Nach dem Anlegen der optionalen Tabelle `admins` können Owner weitere Admins direkt unter `/admin/team` hinzufügen oder deaktivieren. Die Bootstrap-Adresse aus `APPWRITE_ADMIN_EMAILS` bleibt dabei immer Owner und ermöglicht die Wiederherstellung des Zugriffs.
+
+Kontaktanfragen werden in der Tabelle `contact_requests` gespeichert. Dafür werden `name` (String, 100, Pflicht), `email` (String/E-Mail, 254, Pflicht), `phone` (String, 40), `subject` (String, 100, Pflicht), `message` (String, 2000, Pflicht), `status` (String, 20, Pflicht) und `createdAt` (Datetime, Pflicht) benötigt. Öffentliche Berechtigungen bleiben leer.
 
 Für die Tabelle `admins` werden die Spalten `email` (String/E-Mail, 254, Pflicht), `name` (String, 100, Pflicht), `role` (String, 20, Pflicht), `status` (String, 20, Pflicht) und `createdAt` (Datetime, Pflicht) benötigt. Öffentliche Tabellen- und Zeilenberechtigungen bleiben leer; die Website greift ausschließlich serverseitig zu.
 
