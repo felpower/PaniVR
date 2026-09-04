@@ -27,7 +27,10 @@ export async function POST(request: NextRequest) {
   }
 
   if (!contentType.includes('application/json')) {
-    const response = NextResponse.redirect(new URL(safeDestination(data.next), request.url), 303);
+    // Relative redirect keeps the hostname entered by the device. This matters
+    // for local testing where Next.js listens on 0.0.0.0 but the phone uses
+    // the PC's LAN address (for example 192.168.88.131).
+    const response = new NextResponse(null, { status: 303, headers: { Location: safeDestination(data.next) } });
     response.cookies.set(developmentAccessCookie, await createDevelopmentAccessToken(), { httpOnly: true, secure: request.nextUrl.protocol === 'https:', sameSite: 'strict', path: '/', maxAge: 60 * 60 * 24 * 7 });
     return response;
   }
