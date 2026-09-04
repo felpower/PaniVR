@@ -66,10 +66,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="arena-card" aria-label={`Abstrakte Darstellung der ${brand.name} Arena`}>
-          <div className="arena-scan" /><div className="arena-topline"><span>ARENA // LIVE</span><span className="live-dot">● 01</span></div>
-          <div className="arena-visual"><span className="player player-one">P1</span><span className="player player-two">P2</span><span className="player player-three">P3</span><span className="target-ring" /></div>
-          <div className="arena-bottom"><span><strong>100%</strong> kabellos</span><span><strong>360°</strong> Bewegung</span></div>
+        <div className="arena-card" aria-label={`${brand.name} Free-Roam-VR-Arena`}>
+          <div className="arena-scan" />
+          <div className="arena-topline"><span>FREE-ROAM // VR</span><span className="live-dot">● ARENA</span></div>
+          <div className="arena-visual"><span className="arena-line arena-line-one" /><span className="arena-line arena-line-two" /><span className="arena-node arena-node-one" /><span className="arena-node arena-node-two" /><span className="arena-node arena-node-three" /><strong className="arena-title">MOVE<br /><em>TOGETHER</em></strong></div>
+          <div className="arena-bottom"><span>PRIVATE SESSION</span><span>NO CABLES. NO LIMITS.</span></div>
         </div>
 
         <div className="hero-stats" aria-label="Die wichtigsten Fakten">
