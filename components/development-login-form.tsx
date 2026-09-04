@@ -36,12 +36,13 @@ export function DevelopmentLoginForm({ nextPath }: { nextPath: string }) {
   }
 
   return (
-    <form className="development-login-form" onSubmit={submit}>
+    <form className="development-login-form" action="/api/access" method="post" onSubmit={submit}>
       <label htmlFor="development-password">Development-Passwort</label>
       <div className="development-password-field">
         <LockKeyhole size={19} aria-hidden="true" />
         <input id="development-password" name="password" type="password" autoComplete="current-password" autoFocus required />
       </div>
+      <input type="hidden" name="next" value={nextPath} />
       {error && <p className="development-login-error" role="alert">{error}</p>}
       <button type="submit" disabled={submitting}>
         {submitting ? <><LoaderCircle className="spin" size={18} /> Wird geprüft …</> : <>Vorschau öffnen <ArrowRight size={18} /></>}
