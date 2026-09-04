@@ -6,7 +6,7 @@ import { MobileBookingCta } from '@/components/mobile-booking-cta';
 import { brand, siteUrl } from '@/lib/brand';
 
 const facts = [
-  { value: 'XX m²', label: 'freie Spielfläche' },
+  { value: '600 m²', label: 'freie Spielfläche' },
   { value: `${brand.booking.minimumPlayers}–${brand.booking.maximumPlayers}`, label: 'Spieler gleichzeitig' },
   { value: '100 %', label: 'exklusiv für euch' },
 ];
@@ -79,7 +79,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="ticker" aria-hidden="true"><div><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span><i>✦</i><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span></div></div>
+      <div className="ticker" aria-hidden="true"><div><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span><i>✦</i><span>FREE-ROAM VR</span><i>✦</i><span>TEAM VS TEAM</span><i>✦</i><span>KABELLOS</span><i>✦</i><span>MITTEN IM RAMINGTAL</span></div></div>
 
       <section className="intro section-pad" id="erlebnis">
         <div className="section-heading">
