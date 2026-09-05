@@ -26,7 +26,7 @@ export default async function AdminPage() {
   return (
     <main className="admin-page">
       <header className="admin-header"><div className="admin-logo"><BrandIdentity /><small>Administration</small></div><div className="admin-account"><div><strong>{user.name || 'Admin'}</strong><span>{user.email}</span></div><form action="/api/admin/logout" method="post"><button type="submit" aria-label="Abmelden"><LogOut size={18} /></button></form></div></header>
-      <div className="admin-content"><div className="admin-title"><div><p className="admin-kicker">Übersicht</p><h1>Reservierungen</h1></div><div className="admin-title-links"><Link href="/admin/zeiten">Zeiten verwalten</Link><Link href="/admin/spieler">Spieler verwalten</Link><Link href="/admin/email-vorschau">E-Mail-Vorschau</Link><Link href="/admin/team">Team verwalten</Link><Link href="/"><ArrowLeft size={16} /> Website ansehen</Link></div></div>{loadError && <p className="admin-error">{loadError}</p>}<AdminReservations initialReservations={reservations} /></div>
+      <div className="admin-content"><div className="admin-title"><div><p className="admin-kicker">Übersicht</p><h1>Reservierungen</h1></div><div className="admin-title-links"><Link href="/admin/zeiten">Zeiten verwalten</Link><Link href="/admin/anfragen">Kontaktanfragen</Link><Link href="/admin/spieler">Spieler verwalten</Link><Link href="/admin/email-vorschau">E-Mail-Vorschau</Link><Link href="/admin/team">Team verwalten</Link><Link href="/"><ArrowLeft size={16} /> Website ansehen</Link></div></div>{loadError && <p className="admin-error">{loadError}</p>}<AdminReservations initialReservations={reservations} /></div>
     </main>
   );
 }

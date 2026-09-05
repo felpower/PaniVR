@@ -11,11 +11,12 @@ export function DevelopmentBanner() {
     router.refresh();
   }
 
-  return (
-    <aside className="development-banner" aria-label="Hinweis zum Testbetrieb">
-      <strong>Development-Vorschau</strong>
-      <span>Keine echten Reservierungen · Alle Eingaben sind Testdaten</span>
-      <button type="button" onClick={lockPreview}>Vorschau sperren</button>
-    </aside>
-  );
+  // return (
+  //   <aside className="development-banner" aria-label="Hinweis zum Testbetrieb">
+  //     <strong>Development-Vorschau</strong>
+  //     <span>Keine echten Reservierungen · Alle Eingaben sind Testdaten</span>
+  //     <button type="button" onClick={lockPreview}>Vorschau sperren</button>
+  //   </aside>
+  // );
+  return null;
 }

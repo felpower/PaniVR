@@ -4,6 +4,8 @@ import { BookingForm } from '@/components/booking-form';
 import { BrandIdentity } from '@/components/brand-identity';
 import { PricingHighlight } from '@/components/pricing-highlight';
 import { MobileBookingCta } from '@/components/mobile-booking-cta';
+import { PublicNavigation } from '@/components/public-navigation';
+import { FaqList } from '@/components/faq-list';
 import { brand, siteUrl } from '@/lib/brand';
 
 const facts = [
@@ -13,13 +15,21 @@ const facts = [
 ];
 const tickerItems = ['FREE-ROAM VR', 'TEAM VS TEAM', 'KABELLOS', 'MITTEN IM RAMINGTAL', 'VR SHOOTER', 'PRIVATE ARENA', 'TEAMPLAY', 'VOLLE IMMERSION', 'MISSION START', 'HEADSET ON', 'CO-OP ACTION', 'NO CABLES', 'READY PLAYER'];
 
-const faqs = [
+const faqs: ReadonlyArray<readonly [string, string]> = [
   ['Was ist Free-Roam VR?', 'Ihr bewegt euch frei und ohne Kabel durch eine große reale Spielfläche. In der VR-Brille wird daraus eine virtuelle Arena – jede echte Bewegung wird direkt ins Spiel übertragen.'],
   ['Teilen wir die Arena mit anderen?', 'Nein. Euer gebuchter Termin gehört nur eurer Gruppe. Es werden keine fremden Spieler dazugebucht.'],
   ['Kann VR Übelkeit verursachen?', 'Bei Free-Roam bewegt ihr euch in der echten Halle genauso wie in der virtuellen Welt. Das reduziert den typischen Konflikt zwischen Augen und Gleichgewichtssinn deutlich.'],
   ['Was sollen wir mitbringen?', 'Bequeme Kleidung und saubere Hallenschuhe sind ideal. Die VR-Brillen und Controller bekommt ihr selbstverständlich von uns.'],
   ['Ist das auch für Firmen und größere Gruppen möglich?', 'Ja. Für Team-Events, Vereine und Gruppen außerhalb der regulären Größe stellen wir gerne ein individuelles Programm zusammen. Schreibt uns oder ruft kurz an.'],
   ['Müssen wir online bezahlen?', 'Nein. Die Reservierung ist kostenlos und ohne Online-Zahlung. Alle weiteren Details erhaltet ihr mit der Reservierungsbestätigung.'],
+  ['Brauche ich VR-Erfahrung?', 'Nein. Vor jedem Termin erklären wir euch die Ausrüstung, die Spielregeln und die Steuerung. Nach der Einführung könnt ihr direkt loslegen.'],
+  ['Was ziehe ich am besten an?', 'Bequeme Kleidung und saubere, geschlossene Hallenschuhe sind ideal. Ihr bewegt euch aktiv durch die Arena, daher solltet ihr euch gut bewegen können.'],
+  ['Was passiert, wenn wir zu spät kommen?', 'Plant bitte ein paar Minuten vor eurem Termin ein. Eine Verspätung verkürzt sonst möglicherweise eure gemeinsame Spielzeit, da der nächste Termin vorbereitet werden muss.'],
+  ['Wie kann ich stornieren oder ändern?', 'Bis 48 Stunden vor dem bestätigten Termin könnt ihr kostenlos stornieren oder Änderungen bekannt geben. Meldet euch bitte telefonisch oder über das Kontaktformular und nennt eure Reservierungsnummer.'],
+  ['Können wir vor oder nach dem Spielen etwas essen?', 'Ja. Direkt nebenan liegt das Gasthaus zur Linde. Für Gruppen können Essen, Getränke und auf Wunsch auch Gästezimmer separat angefragt werden.'],
+  ['Gibt es Termine außerhalb der angezeigten Zeiten?', 'Für größere Gruppen, Firmenfeiern oder besondere Anlässe prüfen wir gerne einen individuellen Termin. Schickt uns dazu einfach eine Anfrage.'],
+  ['Können Kinder teilnehmen?', 'Das hängt von Alter, Größe und dem gewünschten Erlebnis ab. Meldet euch kurz bei uns, dann klären wir gemeinsam, ob der Termin passend ist.'],
+  ['Findet das Erlebnis auch bei schlechtem Wetter statt?', 'Ja. Die Arena ist in einer Indoor-Halle – Regen, Kälte oder Sommerhitze spielen für euren Termin keine Rolle.'],
 ];
 
 export default function Home() {
@@ -58,15 +68,7 @@ export default function Home() {
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }} />
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label={`${brand.name} Startseite`}>
-          <BrandIdentity />
-        </a>
-        <nav className="desktop-nav" aria-label="Hauptnavigation">
-          <a href="#erlebnis">Erlebnis</a><a href="#ablauf">So läuft&apos;s</a><a href="#anlaesse">Für Gruppen</a><a href="/event">Preise & Events</a><a href="/leaderboard">Leaderboard</a><a href="/spieler">Spielerbereich</a><a href="#faq">FAQ</a>
-        </nav>
-        <a className="button button-small" href="#buchen">Termin sichern</a>
-      </header>
+      <PublicNavigation home />
 
       <section className="hero" id="top">
         <div className="hero-grid" aria-hidden="true" /><div className="hero-glow hero-glow-one" aria-hidden="true" /><div className="hero-glow hero-glow-two" aria-hidden="true" />
@@ -145,7 +147,7 @@ export default function Home() {
 
       <section className="faq section-pad" id="faq">
         <div className="faq-heading"><p className="section-kicker">Gut zu wissen</p><h2>Fragen?<br /><span>Antworten.</span></h2><p>Noch etwas unklar? Ruft uns einfach an unter <a href={`tel:${brand.phoneHref}`}>{brand.phoneDisplay}</a> oder schreibt uns direkt.</p><a className="faq-contact-link" href="/kontakt">Zum Kontaktformular <ArrowRight size={16} /></a></div>
-        <div className="faq-list">{faqs.map(([question, answer], index) => <details key={question}><summary><span>{String(index + 1).padStart(2, '0')}</span>{question}<i>+</i></summary><p>{answer}</p></details>)}</div>
+        <FaqList items={faqs} />
       </section>
 
       <section className="location">

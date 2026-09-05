@@ -1,10 +1,11 @@
-import { Account, Client, TablesDB, Users } from 'node-appwrite';
+import { Account, Client, Query, TablesDB, Users } from 'node-appwrite';
 
 const endpoint = process.env.PANIVR_APPWRITE_ENDPOINT || process.env.APPWRITE_ENDPOINT || process.env.APPWRITE_SITE_API_ENDPOINT;
 const projectId = process.env.PANIVR_APPWRITE_PROJECT_ID || process.env.APPWRITE_PROJECT_ID || process.env.APPWRITE_SITE_PROJECT_ID;
 export const publicAppwriteEndpoint = endpoint;
 export const publicAppwriteProjectId = projectId;
 const apiKey = process.env.PANIVR_APPWRITE_API_KEY || process.env.APPWRITE_API_KEY;
+
 
 export const appwriteConfigured = Boolean(endpoint && projectId && apiKey);
 export const databaseId = process.env.PANIVR_APPWRITE_DATABASE_ID || process.env.APPWRITE_DATABASE_ID || 'panivr';
@@ -36,3 +37,9 @@ export function getTablesDB() {
 }
 export function getUsers() { if (!endpoint || !projectId || !apiKey) throw new Error('Appwrite ist noch nicht konfiguriert.'); return new Users(new Client().setEndpoint(endpoint).setProject(projectId).setKey(apiKey)); }
 export function getAccountWithJwt(jwt: string) { if (!endpoint || !projectId || !jwt) throw new Error('Appwrite ist noch nicht konfiguriert.'); return new Account(new Client().setEndpoint(endpoint).setProject(projectId).setJWT(jwt)); }
+
+export async function deletePlayerData(playerId: string) {
+  const tables = getTablesDB();
+  const result = await tables.listRows({ databaseId, tableId: playerScoresTableId, queries: [Query.equal('playerId', [playerId]), Query.limit(5000)], total: false, ttl: 0 });
+  await Promise.all(result.rows.map((row) => tables.deleteRow({ databaseId, tableId: playerScoresTableId, rowId: row.$id })));
+}
