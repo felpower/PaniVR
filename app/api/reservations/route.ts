@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { appwriteConfigured, databaseId, getTablesDB, reservationsTableId } from '@/lib/appwrite-server';
+import { getAvailableSlots } from '@/lib/availability';
 import { validateBooking } from '@/lib/booking';
+import { rateLimited } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 
@@ -16,6 +18,9 @@ export async function POST(request: NextRequest) {
   if (fetchSite && !['same-origin', 'same-site', 'none'].includes(fetchSite)) {
     return NextResponse.json({ message: 'Die Anfrage wurde blockiert.' }, { status: 403 });
   }
+  if (rateLimited(request, 'reservations', 20, 10 * 60_000)) {
+    return NextResponse.json({ message: 'Zu viele Anfragen. Bitte versuche es in ein paar Minuten erneut.' }, { status: 429 });
+  }
 
   let body: unknown;
   try {
@@ -26,6 +31,11 @@ export async function POST(request: NextRequest) {
 
   const result = validateBooking(body);
   if (!result.ok) return NextResponse.json({ message: result.message }, { status: 400 });
+  // Gleiche Quelle wie das Formular: im Admin-Bereich hinzugefügte Zeiten sind
+  // buchbar, gelöschte Zeiten nicht.
+  if (!(await getAvailableSlots(result.data.date)).includes(result.data.slot)) {
+    return NextResponse.json({ message: 'Bitte wähle eine verfügbare Uhrzeit.' }, { status: 400 });
+  }
 
   const bookingMode = process.env.BOOKING_MODE || (process.env.BOOKING_ENABLED === 'true' ? 'live' : 'disabled');
   if (process.env.NODE_ENV === 'production' && !['test', 'live'].includes(bookingMode)) {

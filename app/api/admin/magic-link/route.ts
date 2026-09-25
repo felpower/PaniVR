@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ID } from 'node-appwrite';
 import { getAdminApiAccount, isAdminEmail, trustedCallbackOrigin } from '@/lib/admin-auth';
+import { rateLimited } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
   const requestSize = Number(request.headers.get('content-length') || 0);
   if (requestSize > 5_000) return NextResponse.json({ message: 'Die Anfrage ist zu groß.' }, { status: 413 });
+  if (rateLimited(request, 'admin-magic-link', 5, 15 * 60_000)) {
+    return NextResponse.json({ message: 'Zu viele Anfragen. Bitte warte ein paar Minuten.' }, { status: 429 });
+  }
 
   let email = '';
   try {

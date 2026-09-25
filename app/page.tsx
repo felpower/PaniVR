@@ -6,6 +6,7 @@ import { PricingHighlight } from '@/components/pricing-highlight';
 import { MobileBookingCta } from '@/components/mobile-booking-cta';
 import { PublicNavigation } from '@/components/public-navigation';
 import { FaqList } from '@/components/faq-list';
+import { LocationMap } from '@/components/location-map';
 import { brand, siteUrl } from '@/lib/brand';
 
 const facts = [
@@ -41,7 +42,7 @@ export default function Home() {
     url: siteUrl,
     telephone: brand.phoneHref,
     email: brand.email,
-    image: `${siteUrl}/og.png`,
+    image: `${siteUrl}/og.jpg`,
     logo: `${siteUrl}/vr-virtual-raiders-logo.jpeg`,
     priceRange: '€€',
     areaServed: ['Kleinraming', 'Steyr', 'Oberösterreich'],
@@ -152,7 +153,7 @@ export default function Home() {
 
       <section className="location">
         <div className="location-grid" aria-hidden="true" /><div className="location-marker"><span>P</span><i /></div>
-        <div className="location-layout"><div className="location-card"><p className="section-kicker">Hier findet ihr uns</p><h2>Mitten im<br /><span>Ramingtal.</span></h2><address>{brand.venueName}<br />{brand.address.street}<br />{brand.address.postalCode} {brand.address.city}</address><a className="button" href={brand.mapsUrl} target="_blank" rel="noreferrer">Route planen <ArrowRight size={17} /></a></div><div className="location-map"><iframe title="Karte: VR Virtual Raiders in Kleinraming" src="https://www.google.com/maps?q=Ramingtalstra%C3%9Fe+18,+4442+Kleinraming&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div></div>
+        <div className="location-layout"><div className="location-card"><p className="section-kicker">Hier findet ihr uns</p><h2>Mitten im<br /><span>Ramingtal.</span></h2><address>{brand.venueName}<br />{brand.address.street}<br />{brand.address.postalCode} {brand.address.city}</address><a className="button" href={brand.mapsUrl} target="_blank" rel="noreferrer">Route planen <ArrowRight size={17} /></a></div><div className="location-map"><LocationMap /></div></div>
       </section>
 
       <footer><div className="footer-main"><a className="brand footer-brand" href="#top" aria-label={`${brand.name} Startseite`}><BrandIdentity /></a><p>{brand.tagline}<br />Free-Roam VR bei Steyr.</p><a className="footer-cta" href="#buchen">Jetzt Termin sichern <ArrowRight /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {brand.name} · {brand.legalName}</span><a className="creator-link" href="https://felpower-software.com/" target="_blank" rel="noreferrer">Website erstellt von Felpower Software</a><nav><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href="/agb">Stornobedingungen</a><a href="/kontakt">Kontakt</a><a href="/admin/login">Admin-Bereich</a></nav></div></footer>

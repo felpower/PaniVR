@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ID, Query } from 'node-appwrite';
-import { getCurrentAdmin } from '@/lib/admin-auth';
+import { Query } from 'node-appwrite';
+import { adminWriteGuard, getCurrentAdmin } from '@/lib/admin-auth';
 import { availabilityTableId, databaseId, getTablesDB } from '@/lib/appwrite-server';
 
 export const runtime = 'nodejs';
@@ -18,7 +18,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await auth())) return NextResponse.json({ message: 'Nicht angemeldet.' }, { status: 401 });
+  const { response } = await adminWriteGuard(); if (response) return response;
   const body = await request.json().catch(() => ({}));
   const date = String(body.date || ''); const slot = String(body.slot || '');
   if (!validDate(date) || !validSlot(slot)) return NextResponse.json({ message: 'Bitte gib ein gültiges Datum und eine Uhrzeit ein.' }, { status: 400 });
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!(await auth())) return NextResponse.json({ message: 'Nicht angemeldet.' }, { status: 401 });
+  const { response } = await adminWriteGuard(); if (response) return response;
   const body = await request.json().catch(() => ({})); const id = String(body.id || ''); const date = String(body.date || ''); const slot = String(body.slot || '');
   if (!id || !validDate(date) || !validSlot(slot)) return NextResponse.json({ message: 'Ungültige Termindaten.' }, { status: 400 });
   try { const row = await getTablesDB().updateRow({ databaseId, tableId: availabilityTableId, rowId: id, data: { date, slot, source: 'admin' } }); return NextResponse.json({ slot: { id: row.$id, date, slot, status: String(row.status || 'open'), source: 'admin' } }); }
@@ -40,7 +40,7 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!(await auth())) return NextResponse.json({ message: 'Nicht angemeldet.' }, { status: 401 });
+  const { response } = await adminWriteGuard(); if (response) return response;
   const id = request.nextUrl.searchParams.get('id') || ''; if (!id) return NextResponse.json({ message: 'Ungültiger Termin.' }, { status: 400 });
   try { await getTablesDB().deleteRow({ databaseId, tableId: availabilityTableId, rowId: id }); return NextResponse.json({ ok: true }); }
   catch { return NextResponse.json({ message: 'Der Termin konnte nicht gelöscht werden.' }, { status: 503 }); }

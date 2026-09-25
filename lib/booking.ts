@@ -13,6 +13,18 @@ export type BookingPayload = {
   company?: string;
 };
 
+const timeZone = 'Europe/Vienna';
+const slotPattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+function todayInVienna() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+}
+
+function addDays(dateString: string, days: number) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
+}
+
 export function getSlotsForDate(dateString: string) {
   const date = new Date(`${dateString}T12:00:00`);
   if (Number.isNaN(date.getTime())) return [];
@@ -20,12 +32,13 @@ export function getSlotsForDate(dateString: string) {
 }
 
 export function isBookableDate(dateString: string) {
-  const candidate = new Date(`${dateString}T12:00:00`);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const lastDay = new Date(today);
-  lastDay.setDate(lastDay.getDate() + brand.booking.bookingWindowDays);
-  return candidate > today && candidate <= lastDay && getSlotsForDate(dateString).length > 0;
+  // Nur echte Kalendertage (kein 2026-02-31) zulassen.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString) || addDays(dateString, 0) !== dateString) return false;
+  // Server (UTC) und Browser können in unterschiedlichen Zeitzonen laufen.
+  // Maßgeblich ist der Kalendertag in Österreich; wie im Formular kann ab
+  // morgen gebucht werden, damit keine bereits vergangenen Slots möglich sind.
+  const today = todayInVienna();
+  return dateString > today && dateString <= addDays(today, brand.booking.bookingWindowDays) && getSlotsForDate(dateString).length > 0;
 }
 
 export function validateBooking(value: unknown): { ok: true; data: BookingPayload } | { ok: false; message: string } {
@@ -43,7 +56,9 @@ export function validateBooking(value: unknown): { ok: true; data: BookingPayloa
 
   if (company) return { ok: false, message: 'Die Anfrage konnte nicht verarbeitet werden.' };
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !isBookableDate(date)) return { ok: false, message: 'Bitte wähle einen verfügbaren Tag.' };
-  if (!getSlotsForDate(date).includes(slot)) return { ok: false, message: 'Bitte wähle eine verfügbare Uhrzeit.' };
+  // Ob der Slot an diesem Tag angeboten wird, prüft die API anhand der im
+  // Admin-Bereich gepflegten Zeiten (siehe getAvailableSlots).
+  if (!slotPattern.test(slot)) return { ok: false, message: 'Bitte wähle eine verfügbare Uhrzeit.' };
   if (!Number.isInteger(players) || players < brand.booking.minimumPlayers || players > brand.booking.maximumPlayers) return { ok: false, message: `Die Gruppengröße muss zwischen ${brand.booking.minimumPlayers} und ${brand.booking.maximumPlayers} Personen liegen.` };
   if (name.length < 2 || name.length > 100) return { ok: false, message: 'Bitte gib deinen vollständigen Namen ein.' };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) return { ok: false, message: 'Bitte gib eine gültige E-Mail-Adresse ein.' };

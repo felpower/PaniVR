@@ -1,5 +1,6 @@
 import 'server-only';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 import { redirect } from 'next/navigation';
 import { Account, Client, Query } from 'node-appwrite';
 import { adminsTableId, databaseId, getTablesDB } from '@/lib/appwrite-server';
@@ -69,6 +70,17 @@ export async function getCurrentAdmin() {
   } catch {
     return null;
   }
+}
+
+// Für alle schreibenden Admin-APIs: Admins mit der Rolle "readonly" dürfen
+// nur lesen.
+export async function adminWriteGuard() {
+  const admin = await getCurrentAdmin();
+  if (!admin) return { admin: null, response: NextResponse.json({ message: 'Nicht angemeldet.' }, { status: 401 }) };
+  if ((await getAdminRole(admin.user.email)) === 'readonly') {
+    return { admin: null, response: NextResponse.json({ message: 'Dein Zugang ist nur lesend.' }, { status: 403 }) };
+  }
+  return { admin, response: null };
 }
 
 export async function requireAdmin() {

@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   description: brand.description,
   keywords: ['Virtual Reality Steyr', 'VR Arena Oberösterreich', 'Free-Roam VR', 'VR Kleinraming', 'Firmenevent Steyr', 'Geburtstag Steyr', 'Schlechtwetterprogramm Steyr'],
   alternates: { canonical: '/' },
-  openGraph: { type: 'website', locale: 'de_AT', url: '/', siteName: brand.name, title: `${brand.name} | Free-Roam VR Arena bei Steyr`, description: brand.description, images: [{ url: '/og.png', width: 1200, height: 630, alt: `${brand.name} – ${brand.tagline}` }] },
-  twitter: { card: 'summary_large_image', title: `${brand.name} | Free-Roam VR Arena bei Steyr`, description: brand.description, images: ['/og.png'] },
+  openGraph: { type: 'website', locale: 'de_AT', url: '/', siteName: brand.name, title: `${brand.name} | Free-Roam VR Arena bei Steyr`, description: brand.description, images: [{ url: '/og.jpg', width: 1200, height: 630, alt: `${brand.name} – ${brand.tagline}` }] },
+  twitter: { card: 'summary_large_image', title: `${brand.name} | Free-Roam VR Arena bei Steyr`, description: brand.description, images: ['/og.jpg'] },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
